@@ -24,7 +24,7 @@ class UserManagementController extends Controller
         if (Auth::user()->type=='Admin' || $returnAccessStatus=='allow')
         {
             //$company_id=Auth::user()->company_id;
-            $result      = User::query()->where('type','!=','Admin')->get();
+            $result  = User::query()->where('type','User')->get();
             return view('usermanagement.user_control',compact('result'));
         }
         else
@@ -43,25 +43,25 @@ class UserManagementController extends Controller
         if (Auth::user()->type=='Admin' || $returnAccessStatus=='allow')
         {
             //$company_id=Auth::user()->company_id;
-            $users      = DB::table('users')->get();
-            $result     = DB::table('users')->get();
+            $users      = DB::table('users')->where('type','User')->get();
+            $result     = DB::table('users')->where('type','User')->get();
 
             // search by name
             if($request->name)
             {
-                $result = User::where('name','LIKE','%'.$request->name.'%')->get();
+                $result = User::where('name','LIKE','%'.$request->name.'%')->where('type','User')->get();
             }
 
             // search by role name
             if($request->role_name)
             {
-                $result = User::where('type','LIKE','%'.$request->role_name.'%')->get();
+                $result = User::where('type','LIKE','%'.$request->role_name.'%')->where('type','User')->get();
             }
 
             // search by status
             if($request->status)
             {
-                $result = User::where('status','LIKE','%'.$request->status.'%')->get();
+                $result = User::where('status','LIKE','%'.$request->status.'%')->where('type','User')->get();
             }
 
             // search by name and role name

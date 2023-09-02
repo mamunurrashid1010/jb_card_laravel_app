@@ -28,7 +28,22 @@
                     @endif
                 @endif
 
-<!-- --------------------------------------- package ------------------------------------------ -->
+<!----------------------------------------- merchant ------------------------------------------ -->
+                @if (Auth::user()->type=='Admin')
+                    <li> <a href="{{route('merchant.index')}}"><i class="la la-user-friends">
+                            </i> <span>Merchant</span></a>
+                    </li>
+                @else
+                    <!-- Merchant -->
+                    @php $merchant= in_array('Merchant',$arr);@endphp
+                    @if($merchant>0)
+                        <li> <a href="{{route('merchant.index')}}"><i class="la la-user-friends">
+                                </i> <span>Merchant</span></a>
+                        </li>
+                    @endif
+                @endif
+
+<!----------------------------------------- package ------------------------------------------ -->
                 @if (Auth::user()->type=='Admin')
                     <li> <a href="{{route('package.index')}}"><i class="la la-list">
                             </i> <span>Package</span></a>

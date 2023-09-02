@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MerchantController;
 use App\Http\Controllers\PackagesController;
 use App\Http\Controllers\ProductsController;
 use Illuminate\Support\Facades\Auth;
@@ -59,6 +60,12 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('package/index',[PackagesController::class,'index'])->middleware('auth')->name('package.index');
 Route::post('package/store',[PackagesController::class,'store'])->middleware('auth')->name('package.store');
 Route::post('package/update',[PackagesController::class,'update'])->middleware('auth')->name('package.update');
+
+# ----------------------------- merchant ----------------------------------------#
+Route::get('merchant/index',[MerchantController::class,'index'])->middleware('auth')->name('merchant.index');
+Route::post('merchant/store',[MerchantController::class,'store'])->middleware('auth')->name('merchant.store');
+Route::post('merchant/update',[MerchantController::class,'update'])->middleware('auth')->name('merchant.update');
+
 
 // ----------------------------- product ----------------------------------------//
 Route::get('product/index',[ProductsController::class,'index'])->middleware('auth')->name('product.index');

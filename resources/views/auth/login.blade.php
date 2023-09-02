@@ -5,7 +5,8 @@
             <div class="container">
                 <!-- Account Logo -->
 
-                <div class="account-logo">
+{{--                <div class="account-logo">--}}
+                <div class="">
                     <img src="{{ URL::to('assets/img/logo.png') }}" alt="">
                 </div>
                 {{-- message --}}
