@@ -28,6 +28,21 @@
                     @endif
                 @endif
 
+<!-- --------------------------------------- package ------------------------------------------ -->
+                @if (Auth::user()->type=='Admin')
+                    <li> <a href="{{route('package.index')}}"><i class="la la-list">
+                            </i> <span>Package</span></a>
+                    </li>
+                @else
+                    <!-- Package -->
+                    @php $package= in_array('Package',$arr);@endphp
+                    @if($package>0)
+                        <li> <a href="{{route('package.index')}}"><i class="la la-list-alt">
+                                </i> <span>Package</span></a>
+                        </li>
+                    @endif
+                @endif
+
 <!-----------------------------------------Authentication/User Controller------------------------------------------ -->
                 @if (Auth::user()->type=='Admin')
                     {{-- <li class="menu-title"> <span>Authentication</span> </li>--}}

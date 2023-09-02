@@ -13,13 +13,13 @@
                 <!-- /Account Logo -->
                 <div class="account-box">
                     <div class="account-wrapper">
-                        <h3 class="account-title">Login</h3>
-                        <p class="account-subtitle" style="color:brown">Jb Card App </p>
+                        <h3 class="account-title text-white">Login</h3>
+                        <p class="account-subtitle" style="color:#ffc107">Jb Card App </p>
                         <!-- Account Form -->
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
                             <div class="form-group">
-                                <label>Email Address</label>
+                                <label style="color:white">Email Address</label>
                                 <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" placeholder="Enter email">
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
@@ -30,7 +30,7 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col">
-                                        <label>Password</label>
+                                        <label style="color:white">Password</label>
                                     </div>
                                 </div>
                                 <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Enter Password">

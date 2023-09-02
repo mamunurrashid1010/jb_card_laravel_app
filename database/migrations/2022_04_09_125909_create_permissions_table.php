@@ -25,7 +25,7 @@ class CreatePermissionsTable extends Migration
             [
                 ['name' => 'Dashboard', 'parent_id'=>0],
                 ['name' => 'User Controller', 'parent_id'=>0],
-                //['name' => 'Products', 'parent_id'=>0],
+                ['name' => 'Package', 'parent_id'=>0],
                 //['name' => 'Company', 'parent_id'=>0],
 
                 # Dashboard child
@@ -36,7 +36,7 @@ class CreatePermissionsTable extends Migration
                 ['name' => 'Role', 'parent_id'=>2],
 
                 # Products
-                //['name' => 'Products', 'parent_id'=>3],
+                ['name' => 'Package', 'parent_id'=>3],
 
                 # Company child
                 //['name' => 'Company Manage', 'parent_id'=>3],

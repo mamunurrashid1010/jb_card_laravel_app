@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PackagesController;
 use App\Http\Controllers\ProductsController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -53,6 +54,11 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // ----------------------------- main dashboard ------------------------------//
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+# ----------------------------- package ----------------------------------------#
+Route::get('package/index',[PackagesController::class,'index'])->middleware('auth')->name('package.index');
+Route::post('package/store',[PackagesController::class,'store'])->middleware('auth')->name('package.store');
+Route::post('package/update',[PackagesController::class,'update'])->middleware('auth')->name('package.update');
 
 // ----------------------------- product ----------------------------------------//
 Route::get('product/index',[ProductsController::class,'index'])->middleware('auth')->name('product.index');
