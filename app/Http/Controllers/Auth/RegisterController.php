@@ -27,38 +27,42 @@ class RegisterController extends Controller
         $request->validate([
             'name'      => 'required|string|max:255',
             'email'     => 'required|string|email|max:255|unique:users',
+            'phone'     => 'required',
             'password'  => 'required|string|min:5|confirmed',
             'password_confirmation' => 'required',
-            'company_name'      => 'required|string|max:255',
+            //'company_name'      => 'required|string|max:255',
         ]);
 
         # add company/store record
-        $companyId=Companies::insertGetId([
-            'name'=>$request->company_name,
-            'created_at' => date("Y-m-d H:i:s")
-        ]);
+//        $companyId=Companies::insertGetId([
+//            'name'=>$request->company_name,
+//            'created_at' => date("Y-m-d H:i:s")
+//        ]);
 
-        if ($companyId==true)
-        {
-            # user registration
-            $regStatus=User::create([
+
+            # user(customer) registration
+            $regStatus=User::query()->create([
                 'name'      => $request->name,
                 //'avatar'    => $request->image,
                 'email'     => $request->email,
-                'type'      => 'Admin',
+                'phone'     => $request->phone,
+                'type'      => 'Customer',
                 'password'  => Hash::make($request->password),
-                'company_id' => $companyId,
-                'created_at' => date("Y-m-d H:i:s")
+                //'company_id' => $companyId,
+                'created_at' => Carbon::now(),
             ]);
-            if ($regStatus==true)
-            {
-                $data= User::where('id',$regStatus->id)->update([
-                    'company_id' => $companyId,
-                ]);
-                Toastr::success('Create new account successfully :)','Success');
-                return redirect('login');
-            }
-        }
+
+            Toastr::success('Create new account successfully :)','Success');
+            return redirect('login');
+
+//            if ($regStatus==true)
+//            {
+//                $data= User::where('id',$regStatus->id)->update([
+//                    'company_id' => $companyId,
+//                ]);
+//                Toastr::success('Create new account successfully :)','Success');
+//                return redirect('login');
+//            }
 
     }
 }

@@ -61,6 +61,9 @@
 {{--                            </div>--}}
                         </form>
                         <!-- /Account Form -->
+                        <div class="form-group text-center">
+                            <a href="{{ route('register') }}"><button class="btn btn-primary account-btn">Create customer account</button></a>
+                        </div>
                     </div>
                 </div>
             </div>

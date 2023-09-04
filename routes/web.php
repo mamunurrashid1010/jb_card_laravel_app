@@ -43,10 +43,10 @@ Route::group(['middleware'=>'auth'],function()
 
 Auth::routes();
 
-# ------------------------------ register ---------------------------------#
-Route::get('/register', function (){ return redirect()->route('login'); })->name('register');
-//Route::get('/register', [RegisterController::class, 'register'])->name('register');
-//Route::post('/register', [RegisterController::class, 'storeUser'])->name('register');
+# ------------------------------ Customer register ---------------------------------#
+//Route::get('/register', function (){ return redirect()->route('login'); })->name('register');
+Route::get('/register', [RegisterController::class, 'register'])->name('register');
+Route::post('/register', [RegisterController::class, 'storeUser'])->name('register');
 
 // -----------------------------login----------------------------------------//
 Route::get('/login', [LoginController::class, 'login'])->name('login');

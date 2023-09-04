@@ -13,6 +13,8 @@
         <div id="sidebar-menu" class="sidebar-menu">
             <ul>
 
+<!--------------------------------------------- Admin ------------------------------------------------------->
+
 <!-- -------------------------------------------Main/Dashboard----------------------------------------------------- -->
                 @if (Auth::user()->type=='Admin')
                     <li> <a href="{{ route('home') }}" class="noti-dot active"><i class="la la-dashboard">
@@ -94,19 +96,19 @@
                 @endif
 
 <!-- --------------------------------------- product ------------------------------------------ -->
-                @if (Auth::user()->type=='Admin' || Auth::user()->type=='DeliveryAgent' )
-                    <li> <a href="{{route('product.index')}}"><i class="la la-building">
-                            </i> <span>Products</span></a>
-                    </li>
-                @else
-                    <!-- Products -->
-                    @php $products= in_array('Products',$arr);@endphp
-                    @if($products>0)
-                        <li> <a href="{{route('product.index')}}"><i class="la la-building">
-                                </i> <span>Products</span></a>
-                        </li>
-                    @endif
-                @endif
+{{--                @if (Auth::user()->type=='Admin' || Auth::user()->type=='DeliveryAgent' )--}}
+{{--                    <li> <a href="{{route('product.index')}}"><i class="la la-building">--}}
+{{--                            </i> <span>Products</span></a>--}}
+{{--                    </li>--}}
+{{--                @else--}}
+{{--                    <!-- Products -->--}}
+{{--                    @php $products= in_array('Products',$arr);@endphp--}}
+{{--                    @if($products>0)--}}
+{{--                        <li> <a href="{{route('product.index')}}"><i class="la la-building">--}}
+{{--                                </i> <span>Products</span></a>--}}
+{{--                        </li>--}}
+{{--                    @endif--}}
+{{--                @endif--}}
 
 <!------------------------------------------------Company---------------------------------------------- -->
 {{--                @if (Auth::user()->type=='Admin')--}}
@@ -123,6 +125,26 @@
 {{--                    </li>--}}
 {{--                    @endif--}}
 {{--                @endif--}}
+
+
+
+<!--------------------------------------------- Merchant ------------------------------------------------------->
+<!---------------------------------------------Dashboard----------------------------------------------------- -->
+                @if (Auth::user()->type=='Merchant')
+                    <li> <a href="{{ route('home') }}" class="noti-dot active"><i class="la la-dashboard">
+                            </i> <span> Dashboard</span></a>
+                    </li>
+                @endif
+
+
+
+<!--------------------------------------------- Customer ------------------------------------------------------->
+<!---------------------------------------------Dashboard----------------------------------------------------- -->
+                @if (Auth::user()->type=='Customer')
+                    <li> <a href="{{ route('home') }}" class="noti-dot active"><i class="la la-dashboard">
+                            </i> <span> Dashboard</span></a>
+                    </li>
+                @endif
 
 
 

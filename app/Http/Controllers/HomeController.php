@@ -46,6 +46,12 @@ class HomeController extends Controller
         {
             return view('dashboard.dashboard');
         }
+        elseif (Auth::user()->type=='Merchant'){
+            return view('merchantPanel.dashboard.dashboard');
+        }
+        elseif (Auth::user()->type=='Customer'){
+            return view('customerPanel.dashboard.dashboard');
+        }
         else
         {
             return view('dashboard.userDashboard');
