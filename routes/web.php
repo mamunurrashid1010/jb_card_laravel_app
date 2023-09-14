@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MerchantController;
@@ -65,6 +66,11 @@ Route::post('package/update',[PackagesController::class,'update'])->middleware('
 Route::get('merchant/index',[MerchantController::class,'index'])->middleware('auth')->name('merchant.index');
 Route::post('merchant/store',[MerchantController::class,'store'])->middleware('auth')->name('merchant.store');
 Route::post('merchant/update',[MerchantController::class,'update'])->middleware('auth')->name('merchant.update');
+
+# ----------------------------- category ----------------------------------------#
+Route::get('category/index',[CategoriesController::class,'index'])->middleware('auth')->name('category.index');
+Route::post('category/store',[CategoriesController::class,'store'])->middleware('auth')->name('category.store');
+Route::post('category/update',[CategoriesController::class,'update'])->middleware('auth')->name('category.update');
 
 
 // ----------------------------- product ----------------------------------------//

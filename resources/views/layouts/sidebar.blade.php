@@ -60,6 +60,21 @@
                     @endif
                 @endif
 
+<!----------------------------------------- category ------------------------------------------ -->
+                @if (Auth::user()->type=='Admin')
+                    <li> <a href="{{route('category.index')}}"><i class="la la-list-alt">
+                            </i> <span>Category</span></a>
+                    </li>
+                @else
+                    <!-- Package -->
+                    @php $category= in_array('Category',$arr);@endphp
+                    @if($category>0)
+                        <li> <a href="{{route('category.index')}}"><i class="la la-list-alt-alt">
+                                </i> <span>Category</span></a>
+                        </li>
+                    @endif
+                @endif
+
 <!-----------------------------------------Authentication/User Controller------------------------------------------ -->
                 @if (Auth::user()->type=='Admin')
                     {{-- <li class="menu-title"> <span>Authentication</span> </li>--}}
