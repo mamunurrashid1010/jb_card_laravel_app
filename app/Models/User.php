@@ -29,6 +29,7 @@ class User extends Authenticatable
         'status',
         'storeAccess',
         'password',
+        'merchant_id',
     ];
 
     /**

@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MerchantController;
+use App\Http\Controllers\OffersController;
 use App\Http\Controllers\PackagesController;
 use App\Http\Controllers\ProductsController;
 use Illuminate\Support\Facades\Auth;
@@ -56,6 +57,10 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // ----------------------------- main dashboard ------------------------------//
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+# ----------------------------- offer ----------------------------------------#
+Route::get('offer/getAllOffer',[OffersController::class,'getAllOffer'])->middleware('auth')->name('offer.getAllOffer');
+Route::post('offer/statusUpdate',[OffersController::class,'statusUpdate'])->middleware('auth')->name('offer.statusUpdate');
 
 # ----------------------------- package ----------------------------------------#
 Route::get('package/index',[PackagesController::class,'index'])->middleware('auth')->name('package.index');
@@ -119,3 +124,9 @@ Route::post('search/user/list', [App\Http\Controllers\UserManagementController::
 Route::get('change/password', [App\Http\Controllers\UserManagementController::class, 'changePasswordView'])->middleware('auth')->name('change/password');
 Route::post('change/password/db', [App\Http\Controllers\UserManagementController::class, 'changePasswordDB'])->name('change/password/db');
 
+
+# ----------------------------- Merchant Panel ----------------------------------------#
+# offer
+Route::get('merchant/offer/index',[OffersController::class,'index'])->middleware('auth')->name('merchant.offer.index');
+Route::post('merchant/offer/store',[OffersController::class,'store'])->middleware('auth')->name('merchant.offer.store');
+Route::post('merchant/offer/update',[OffersController::class,'update'])->middleware('auth')->name('merchant.offer.update');

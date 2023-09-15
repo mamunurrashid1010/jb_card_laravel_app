@@ -25,6 +25,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('type')->nullable();
+            $table->unsignedBigInteger('merchant_id')->nullable();
             $table->string('image')->nullable();
             $table->string('status')->default('active');
             //$table->text('Access')->nullable(true);

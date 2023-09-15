@@ -30,6 +30,21 @@
                     @endif
                 @endif
 
+<!----------------------------------------- offer ------------------------------------------ -->
+                @if (Auth::user()->type=='Admin')
+                    <li> <a href="{{route('offer.getAllOffer')}}"><i class="la la-list">
+                            </i> <span>Offer</span></a>
+                    </li>
+                @else
+                    <!-- offer -->
+                    @php $offer= in_array('Offer',$arr);@endphp
+                    @if($offer>0)
+                        <li> <a href="{{route('offer.getAllOffer')}}"><i class="la la-list">
+                                </i> <span>Offer</span></a>
+                        </li>
+                    @endif
+                @endif
+
 <!----------------------------------------- merchant ------------------------------------------ -->
                 @if (Auth::user()->type=='Admin')
                     <li> <a href="{{route('merchant.index')}}"><i class="la la-user-friends">
@@ -148,6 +163,13 @@
                 @if (Auth::user()->type=='Merchant')
                     <li> <a href="{{ route('home') }}" class="noti-dot active"><i class="la la-dashboard">
                             </i> <span> Dashboard</span></a>
+                    </li>
+                @endif
+
+<!---------------------------------------------offer----------------------------------------------------- -->
+                @if (Auth::user()->type=='Merchant')
+                    <li> <a href="{{ route('merchant.offer.index') }}"><i class="la la-list-alt">
+                            </i> <span> Offer</span></a>
                     </li>
                 @endif
 
