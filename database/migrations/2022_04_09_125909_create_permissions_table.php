@@ -39,16 +39,16 @@ class CreatePermissionsTable extends Migration
                 ['name' => 'Role', 'parent_id'=>2],
 
                 # Package child
-                ['name' => 'Package', 'parent_id'=>3],
+                ['name' => 'Package Manage', 'parent_id'=>3],
 
                 # Merchant child
-                ['name' => 'Merchant', 'parent_id'=>4],
+                ['name' => 'Merchant Manage', 'parent_id'=>4],
 
                 # Category child
-                ['name' => 'Category', 'parent_id'=>5],
+                ['name' => 'Category Manage', 'parent_id'=>5],
 
                 # Offer child
-                ['name' => 'Offer', 'parent_id'=>6],
+                ['name' => 'Offer Manage', 'parent_id'=>6],
 
                 # Company child
                 //['name' => 'Company Manage', 'parent_id'=>3],

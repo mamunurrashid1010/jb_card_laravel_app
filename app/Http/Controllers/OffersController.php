@@ -116,7 +116,7 @@ class OffersController extends Controller
     function getAllOffer(Request $request){
         # get have module access permission
         $obj=new UserPermissionsController();
-        $returnAccessStatus=$obj->moduleAccessPermission('Offer');
+        $returnAccessStatus=$obj->moduleAccessPermission('Offer Manage');
         if( Auth::user()->type=='Admin' || $returnAccessStatus=='allow'){
             $offers = Offers::query()->orderBy('id','desc')->simplePaginate(20);
             $categories = Categories::query()->get();

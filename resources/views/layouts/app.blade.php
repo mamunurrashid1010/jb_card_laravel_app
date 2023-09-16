@@ -8,7 +8,7 @@
 		<meta name="keywords" content="Jb Card App">
         <!--<meta name="author" content="">-->
         <meta name="robots" content="noindex, nofollow">
-        <title>Jb Card App</title>
+        <title>XTRA SAVY App</title>
 		<!-- Favicon -->
         <link rel="shortcut icon" type="image/x-icon" href="{{ URL::to('assets/images/1656554376.jpg') }}">
 		<!-- Bootstrap CSS -->

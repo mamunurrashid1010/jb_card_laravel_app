@@ -22,7 +22,7 @@ class MerchantController extends Controller
     function index(Request $request){
         # get have module access permission
         $obj=new UserPermissionsController();
-        $returnAccessStatus=$obj->moduleAccessPermission('Merchant');
+        $returnAccessStatus=$obj->moduleAccessPermission('Merchant Manage');
         if( Auth::user()->type=='Admin' || $returnAccessStatus=='allow'){
             $email = $request->email;
             $merchants = Merchant::query()

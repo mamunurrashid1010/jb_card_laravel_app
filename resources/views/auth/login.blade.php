@@ -6,8 +6,8 @@
                 <!-- Account Logo -->
 
 {{--                <div class="account-logo">--}}
-                <div class="">
-                    <img src="{{ URL::to('assets/img/logo.png') }}" alt="">
+                <div class="m-3">
+                    <img src="{{ URL::to('assets/img/logo.png') }}" width="450px" alt="">
                 </div>
                 {{-- message --}}
                 {!! Toastr::message() !!}
@@ -15,7 +15,7 @@
                 <div class="account-box">
                     <div class="account-wrapper">
                         <h3 class="account-title text-white">Login</h3>
-                        <p class="account-subtitle" style="color:#ffc107">Jb Card App </p>
+                        <p class="account-subtitle" style="color:#ffc107">XTRA SAVY App </p>
                         <!-- Account Form -->
                         <form method="POST" action="{{ route('login') }}">
                             @csrf

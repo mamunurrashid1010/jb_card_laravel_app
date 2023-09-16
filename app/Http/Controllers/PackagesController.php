@@ -17,7 +17,7 @@ class PackagesController extends Controller
     function index(Request $request){
         # get have module access permission
         $obj=new UserPermissionsController();
-        $returnAccessStatus=$obj->moduleAccessPermission('Package');
+        $returnAccessStatus=$obj->moduleAccessPermission('Package Manage');
         if( Auth::user()->type=='Admin' || $returnAccessStatus=='allow'){
             $packages = Packages::query()->get();
             return view('packages.index',compact('packages'));

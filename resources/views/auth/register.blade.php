@@ -6,7 +6,7 @@
                 <div class="account-box">
                     <div class="account-wrapper">
                         <h3 class="account-title text-white">Customer Register</h3>
-                        <p class="account-subtitle" style="color:#ffc107">Access to our Jb Card App</p>
+                        <p class="account-subtitle" style="color:#ffc107">Access to our XTRA SAVY App</p>
 
                         <!-- Registration Form -->
                         <form method="POST" action="{{ route('register') }}">

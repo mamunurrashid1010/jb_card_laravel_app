@@ -17,7 +17,7 @@ class CategoriesController extends Controller
     function index(Request $request){
         # get have module access permission
         $obj=new UserPermissionsController();
-        $returnAccessStatus=$obj->moduleAccessPermission('Category');
+        $returnAccessStatus=$obj->moduleAccessPermission('Category Manage');
         if( Auth::user()->type=='Admin' || $returnAccessStatus=='allow'){
             $categories = Categories::query()->get();
             return view('category.index',compact('categories'));

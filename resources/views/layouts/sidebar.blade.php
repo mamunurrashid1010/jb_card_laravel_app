@@ -37,7 +37,7 @@
                     </li>
                 @else
                     <!-- offer -->
-                    @php $offer= in_array('Offer',$arr);@endphp
+                    @php $offer= in_array('Offer Manage',$arr);@endphp
                     @if($offer>0)
                         <li> <a href="{{route('offer.getAllOffer')}}"><i class="la la-list">
                                 </i> <span>Offer</span></a>
@@ -52,7 +52,7 @@
                     </li>
                 @else
                     <!-- Merchant -->
-                    @php $merchant= in_array('Merchant',$arr);@endphp
+                    @php $merchant= in_array('Merchant Manage',$arr);@endphp
                     @if($merchant>0)
                         <li> <a href="{{route('merchant.index')}}"><i class="la la-user-friends">
                                 </i> <span>Merchant</span></a>
@@ -67,7 +67,7 @@
                     </li>
                 @else
                     <!-- Package -->
-                    @php $package= in_array('Package',$arr);@endphp
+                    @php $package= in_array('Package Manage',$arr);@endphp
                     @if($package>0)
                         <li> <a href="{{route('package.index')}}"><i class="la la-list-alt">
                                 </i> <span>Package</span></a>
@@ -82,9 +82,9 @@
                     </li>
                 @else
                     <!-- Package -->
-                    @php $category= in_array('Category',$arr);@endphp
+                    @php $category= in_array('Category Manage',$arr);@endphp
                     @if($category>0)
-                        <li> <a href="{{route('category.index')}}"><i class="la la-list-alt-alt">
+                        <li> <a href="{{route('category.index')}}"><i class="la la-list-alt">
                                 </i> <span>Category</span></a>
                         </li>
                     @endif
