@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\CustomClass\accountHead;
 use App\Http\Controllers\Controller;
 use App\Models\Companies;
+use App\Models\CustomerPackages;
+use App\Models\Packages;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
@@ -20,7 +21,8 @@ class RegisterController extends Controller
 {
     public function register()
     {
-        return view('auth.register');
+        $packages = Packages::query()->get();
+        return view('auth.register',compact('packages'));
     }
     public function storeUser(Request $request)
     {
@@ -30,6 +32,7 @@ class RegisterController extends Controller
             'phone'     => 'required',
             'password'  => 'required|string|min:5|confirmed',
             'password_confirmation' => 'required',
+            'package'   => 'required',
             //'company_name'      => 'required|string|max:255',
         ]);
 
@@ -39,7 +42,8 @@ class RegisterController extends Controller
 //            'created_at' => date("Y-m-d H:i:s")
 //        ]);
 
-
+        DB::beginTransaction();
+        try{
             # user(customer) registration
             $regStatus=User::query()->create([
                 'name'      => $request->name,
@@ -51,9 +55,23 @@ class RegisterController extends Controller
                 //'company_id' => $companyId,
                 'created_at' => Carbon::now(),
             ]);
+            # customer package
+            CustomerPackages::query()->create([
+                'customer_id' => $regStatus->id,
+                'package_id'  => $request->package,
+            ]);
 
+            DB::commit();
             Toastr::success('Create new account successfully :)','Success');
             return redirect('login');
+        }
+        catch(\Exception $e){
+            DB::rollback();
+            //dd($e);
+            Toastr::error('Fail :)','Error');
+            return redirect()->back();
+        }
+
 
 //            if ($regStatus==true)
 //            {

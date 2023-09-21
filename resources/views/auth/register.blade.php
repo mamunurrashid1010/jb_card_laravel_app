@@ -54,6 +54,15 @@
                                 <label style="color:white"><strong>Repeat Password</strong></label>
                                 <input type="password" class="form-control" name="password_confirmation" placeholder="Choose Repeat Password" required>
                             </div>
+                            <div class="form-group">
+                                <label style="color:white"><strong>Package</strong></label>
+                                <select class="form-control select" id="package" name="package" required>
+                                    <option value="">---Select---</option>
+                                    @foreach($packages as $package)
+                                        <option value="{{$package->id}}">{{$package->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
 {{--                            <div class="form-group">--}}
 {{--                                <label style="color:white">Organization/Company Name</label>--}}
 {{--                                <input type="text" class="form-control @error('company_name') is-invalid @enderror" name="company_name" value="{{ old('company_name') }}" placeholder="Enter Name" required>--}}
