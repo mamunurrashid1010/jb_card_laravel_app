@@ -9,5 +9,9 @@ class CustomerPackages extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['customer_id','package_id'];
+    protected $fillable = ['customer_id','package_id','status'];
+
+    function packageInfo(){
+        return $this->belongsTo(Packages::class,'package_id','id');
+    }
 }

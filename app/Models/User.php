@@ -55,9 +55,8 @@ class User extends Authenticatable
         return $this->belongsTo(Companies::class);
     }
 
-    # child/student list
-    function childs(){
-        return $this->hasMany(Students::class,'guardian_id','id')->select('id','guardian_id','name','id_no','phone','details','status');
+    function customerPackage(){
+        return $this->hasOne(CustomerPackages::class,'customer_id','id');
     }
 
 }

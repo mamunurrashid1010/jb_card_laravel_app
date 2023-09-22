@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\CompaniesController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MerchantController;
 use App\Http\Controllers\OffersController;
@@ -45,40 +46,46 @@ Route::group(['middleware'=>'auth'],function()
 
 Auth::routes();
 
-# ------------------------------ Customer register ---------------------------------#
-//Route::get('/register', function (){ return redirect()->route('login'); })->name('register');
-Route::get('/register', [RegisterController::class, 'register'])->name('register');
-Route::post('/register', [RegisterController::class, 'storeUser'])->name('register');
 
-// -----------------------------login----------------------------------------//
+# ----------------------------- Multi Auth ----------------------------------------#
+# login
 Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/login', [LoginController::class, 'authenticate']);
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
-// ----------------------------- main dashboard ------------------------------//
+# main dashboard
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-# ----------------------------- offer ----------------------------------------#
+
+# ----------------------------------------------- Admin Panel ---------------------------------------------------------#
+# customer
+Route::get('customer/index',[CustomerController::class,'index'])->middleware('auth')->name('customer.index');
+Route::post('customer/store',[CustomerController::class,'store'])->middleware('auth')->name('customer.store');
+Route::post('customer/update',[CustomerController::class,'update'])->middleware('auth')->name('customer.update');
+Route::post('customer/accountStatusUpdate',[CustomerController::class,'accountStatusUpdate'])->middleware('auth')->name('customer.accountStatusUpdate');
+Route::post('customer/packageStatusUpdate',[CustomerController::class,'packageStatusUpdate'])->middleware('auth')->name('customer.packageStatusUpdate');
+
+# offer
 Route::get('offer/getAllOffer',[OffersController::class,'getAllOffer'])->middleware('auth')->name('offer.getAllOffer');
 Route::post('offer/statusUpdate',[OffersController::class,'statusUpdate'])->middleware('auth')->name('offer.statusUpdate');
 
-# ----------------------------- package ----------------------------------------#
+#  package
 Route::get('package/index',[PackagesController::class,'index'])->middleware('auth')->name('package.index');
 Route::post('package/store',[PackagesController::class,'store'])->middleware('auth')->name('package.store');
 Route::post('package/update',[PackagesController::class,'update'])->middleware('auth')->name('package.update');
 
-# ----------------------------- merchant ----------------------------------------#
+# merchant
 Route::get('merchant/index',[MerchantController::class,'index'])->middleware('auth')->name('merchant.index');
 Route::post('merchant/store',[MerchantController::class,'store'])->middleware('auth')->name('merchant.store');
 Route::post('merchant/update',[MerchantController::class,'update'])->middleware('auth')->name('merchant.update');
 
-# ----------------------------- category ----------------------------------------#
+# category
 Route::get('category/index',[CategoriesController::class,'index'])->middleware('auth')->name('category.index');
 Route::post('category/store',[CategoriesController::class,'store'])->middleware('auth')->name('category.store');
 Route::post('category/update',[CategoriesController::class,'update'])->middleware('auth')->name('category.update');
 
 
-// ----------------------------- product ----------------------------------------//
+# product
 Route::get('product/index',[ProductsController::class,'index'])->middleware('auth')->name('product.index');
 Route::post('product/store',[ProductsController::class,'store'])->middleware('auth')->name('product.store');
 Route::post('product/update',[ProductsController::class,'update'])->middleware('auth')->name('product.update');
@@ -87,7 +94,7 @@ Route::post('product/statusUpdate',[ProductsController::class,'statusUpdate'])->
 Route::get('product/invoice/{product_id}',[ProductsController::class,'invoice'])->middleware('auth')->name('product.invoice');
 Route::get('product/label/{product_id}',[ProductsController::class,'label'])->middleware('auth')->name('product.label');
 
-// ----------------------------- user userManagement -----------------------//
+# user userManagement
 Route::get('userManagement', [UserManagementController::class, 'index'])->middleware('auth')->name('userManagement');
 Route::post('user/add/save', [UserManagementController::class, 'addNewUserSave'])->name('user/add/save');
 Route::post('search/user/list', [UserManagementController::class, 'searchUser'])->name('search/user/list');
@@ -97,7 +104,7 @@ Route::post('update', [UserManagementController::class, 'update'])->name('update
 Route::get('user/role/{userID?}',[UserManagementController::class,'roleUser'])->middleware('auth')->name('roleUser');
 Route::post('user/role/update',[UserManagementController::class,'userRoleUpdate'])->middleware('auth')->name('user/role/update');
 
-// -----------------------------companies----------------------------------------//
+# companies
 Route::get('company/view',[CompaniesController::class,'view'])->middleware('auth')->name('company/view');
 Route::post('company/update',[CompaniesController::class,'update'])->middleware('auth')->name('company/update');
 
@@ -125,8 +132,17 @@ Route::get('change/password', [App\Http\Controllers\UserManagementController::cl
 Route::post('change/password/db', [App\Http\Controllers\UserManagementController::class, 'changePasswordDB'])->name('change/password/db');
 
 
-# ----------------------------- Merchant Panel ----------------------------------------#
+
+# ----------------------------------------------- Merchant Panel ------------------------------------------------------#
 # offer
 Route::get('merchant/offer/index',[OffersController::class,'index'])->middleware('auth')->name('merchant.offer.index');
 Route::post('merchant/offer/store',[OffersController::class,'store'])->middleware('auth')->name('merchant.offer.store');
 Route::post('merchant/offer/update',[OffersController::class,'update'])->middleware('auth')->name('merchant.offer.update');
+
+
+
+# ----------------------------------------------- Customer Panel ------------------------------------------------------#
+# Customer register
+//Route::get('/register', function (){ return redirect()->route('login'); })->name('register');
+Route::get('/register', [RegisterController::class, 'register'])->name('register');
+Route::post('/register', [RegisterController::class, 'storeUser'])->name('register');

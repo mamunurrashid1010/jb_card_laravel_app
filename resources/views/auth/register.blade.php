@@ -59,7 +59,7 @@
                                 <select class="form-control select" id="package" name="package" required>
                                     <option value="">---Select---</option>
                                     @foreach($packages as $package)
-                                        <option value="{{$package->id}}">{{$package->name}}</option>
+                                        <option value="{{$package->id}}">{{$package->name}} (${{$package->amount}})</option>
                                     @endforeach
                                 </select>
                             </div>

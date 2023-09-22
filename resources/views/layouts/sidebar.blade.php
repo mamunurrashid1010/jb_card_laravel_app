@@ -30,6 +30,21 @@
                     @endif
                 @endif
 
+<!----------------------------------------- customer ------------------------------------------ -->
+                @if (Auth::user()->type=='Admin')
+                    <li> <a href="{{route('customer.index')}}"><i class="la la-user-friends">
+                            </i> <span>Customer</span></a>
+                    </li>
+                @else
+                    <!-- Merchant -->
+                    @php $customer= in_array('Customer Manage',$arr);@endphp
+                    @if($customer>0)
+                        <li> <a href="{{route('customer.index')}}"><i class="la la-user-friends">
+                                </i> <span>Customer</span></a>
+                        </li>
+                    @endif
+                @endif
+
 <!----------------------------------------- offer ------------------------------------------ -->
                 @if (Auth::user()->type=='Admin')
                     <li> <a href="{{route('offer.getAllOffer')}}"><i class="la la-list">
