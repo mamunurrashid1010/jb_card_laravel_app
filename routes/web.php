@@ -146,3 +146,6 @@ Route::post('merchant/offer/update',[OffersController::class,'update'])->middlew
 //Route::get('/register', function (){ return redirect()->route('login'); })->name('register');
 Route::get('/register', [RegisterController::class, 'register'])->name('register');
 Route::post('/register', [RegisterController::class, 'storeUser'])->name('register');
+
+# profile
+Route::get('customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');

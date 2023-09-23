@@ -11,7 +11,22 @@ use Illuminate\Support\Facades\Auth;
 
 class CustomerController extends Controller
 {
-
+    /* ---------------------------------------- Customer panel use ------------------------------------------------- */
+    /**
+     * profile
+     */
+    function profile()
+    {
+        if( Auth::user()->type=='Customer'){
+            $customer = User::query()
+                ->find(Auth::user()->id);
+            return view('customerPanel.profile.index',compact('customer'));
+        }
+        else
+        {
+            return redirect()->route('home');
+        }
+    }
     /* ---------------------------------------- Admin panel use ------------------------------------------------- */
     /**
      * index
