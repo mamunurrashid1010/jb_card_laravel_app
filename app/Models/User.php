@@ -27,6 +27,8 @@ class User extends Authenticatable
         'type',
         'avatar',
         'status',
+        'address',
+        'image',
         'storeAccess',
         'password',
         'merchant_id',

@@ -149,3 +149,4 @@ Route::post('/register', [RegisterController::class, 'storeUser'])->name('regist
 
 # profile
 Route::get('customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
+Route::post('customer/profile/update', [CustomerController::class, 'update'])->name('customer.profile.update');

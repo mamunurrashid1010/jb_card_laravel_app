@@ -6,8 +6,11 @@ use App\Models\CustomerPackages;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
 
 class CustomerController extends Controller
 {
@@ -27,6 +30,79 @@ class CustomerController extends Controller
             return redirect()->route('home');
         }
     }
+
+    /**
+     * update
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    function update(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'name'      => 'required|string|max:255',
+            'phone'     => 'required',
+        ],
+            [
+                'name.required'      =>  'Name required!',
+                'phone.required'     =>  'Phone required!',
+            ]
+        );
+        $customer_id = auth()->user()->id;
+
+        # image update
+        $oldInfo=User::query()->select('image','email')->where('id',$customer_id)->first();
+        if (!empty($request->image))
+        {
+            $image = time().'.'.$request->image->extension();
+            $request->image->move(public_path('images/users/'), $image);
+            #delete old image
+            if (File::exists(public_path('images/users/'.$oldInfo->image))) {
+                File::delete(public_path('images/users/'.$oldInfo->image));
+            }
+        }
+        else{
+            $image=$oldInfo->image;
+        }
+
+        # email update
+        $email = $oldInfo->email;
+        if($request->email){
+           $emailExist = User::query()->where('email',$request->email)->exists();
+           if($emailExist){
+               Toastr::error('Email already exist!','Error');
+               return redirect()->back();
+           }
+           else
+               $email = $request->email;
+        }
+
+        $data = [
+            'name'      => $request->name,
+            'phone'     => $request->phone,
+            'address'   => $request->address,
+            'email'     => $email,
+            'image'     => $image,
+            'updated_at' => Carbon::now()
+        ];
+        User::query()->find($customer_id)->update($data);
+
+        # password update
+        if($request->current_password && $request->password){
+            $checkPassword = Hash::check($request->current_password, auth()->user()->password);
+            if(!$checkPassword){
+                Toastr::error('Current password does not match!','Error');
+                return redirect()->back();
+            }
+            else{
+                User::query()->find($customer_id)->update(['password'=> Hash::make($request->password)]);
+            }
+        }
+
+        Toastr::success('Data Updated Successfully','Success');
+        return redirect()->back();
+    }
+
+
     /* ---------------------------------------- Admin panel use ------------------------------------------------- */
     /**
      * index

@@ -27,6 +27,7 @@ class CreateUsersTable extends Migration
             $table->string('type')->nullable();
             $table->unsignedBigInteger('merchant_id')->nullable();
             $table->string('image')->nullable();
+            $table->text('address')->nullable();
             $table->string('status')->default('active');
             //$table->text('Access')->nullable(true);
             $table->rememberToken();
