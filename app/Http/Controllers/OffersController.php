@@ -10,6 +10,7 @@ use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 
 class OffersController extends Controller
 {
@@ -58,6 +59,16 @@ class OffersController extends Controller
             $merchant_id = Auth::user()->merchant_id;
         }
 
+        # image
+        if (!empty($request->image))
+        {
+            $image = 'offer_'.date('d-m-y').'_'.time().'.'.$request->image->extension();
+            $request->image->move(public_path('images/offers/'), $image);
+        }
+        else{
+            $image='';
+        }
+
         Offers::query()->insertGetId([
             'merchant_id'       => $merchant_id,
             'category_id'       => $request->category_id,
@@ -67,6 +78,8 @@ class OffersController extends Controller
             'end_date'          => $request->end_date,
             'discount'          => $request->discount,
             'point'             => $request->point,
+            'offer_code'        => $request->offer_code,
+            'image'             => $image,
             'created_at'        => Carbon::now(),
         ]);
 
@@ -94,6 +107,21 @@ class OffersController extends Controller
             ]
         );
 
+        # image update
+        $oldInfo=Offers::query()->select('image')->where('id',$request->id)->first();
+        if (!empty($request->image))
+        {
+            $image = 'offer_'.date('d-m-y').'_'.time().'.'.$request->image->extension();
+            $request->image->move(public_path('images/offers/'), $image);
+            #delete old image
+            if (File::exists(public_path('images/offers/'.$oldInfo->image))) {
+                File::delete(public_path('images/offers/'.$oldInfo->image));
+            }
+        }
+        else{
+            $image=$oldInfo->image;
+        }
+
         $data=[
             'category_id'       => $request->category_id,
             'name'              => $request->name,
@@ -102,6 +130,8 @@ class OffersController extends Controller
             'end_date'          => $request->end_date,
             'discount'          => $request->discount,
             'point'             => $request->point,
+            'offer_code'        => $request->offer_code,
+            'image'             => $image,
             'status'            => 'pending',
             'updated_at'    => Carbon::now()
         ];

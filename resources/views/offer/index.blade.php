@@ -56,7 +56,9 @@
                                 <th>#</th>
                                 <th><strong>Merchant</strong></th>
                                 <th><strong>Category</strong></th>
+                                <th><strong>Image</strong></th>
                                 <th><strong>Name</strong></th>
+                                <th><strong>Code</strong></th>
                                 <th><strong>Description</strong></th>
                                 <th><strong>Start Date</strong></th>
                                 <th><strong>End Date</strong></th>
@@ -74,7 +76,9 @@
                                     <td class="merchant_name">{{$offer->merchant->name ?? ''}}</td>
                                     <td hidden class="category_id">{{$offer->category_id}}</td>
                                     <td class="category_name">{{$offer->category->name ?? ''}}</td>
+                                    <td class="image"><img src="{{ asset('images/offers/'.$offer->image) }}" width="75" alt="offer Image"></td>
                                     <td class="name"><strong>{{$offer->name}}</strong></td>
+                                    <td class="offer_code">{{$offer->offer_code}}</td>
                                     <td class="description">{{$offer->description}}</td>
                                     <td class="start_date">{{$offer->start_date}}</td>
                                     <td class="end_date">{{$offer->end_date}}</td>

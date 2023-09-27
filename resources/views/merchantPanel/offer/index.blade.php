@@ -55,7 +55,9 @@
                             <tr>
                                 <th>#</th>
                                 <th><strong>Category</strong></th>
+                                <th><strong>Image</strong></th>
                                 <th><strong>Name</strong></th>
+                                <th><strong>Code</strong></th>
                                 <th><strong>Description</strong></th>
                                 <th><strong>Start Date</strong></th>
                                 <th><strong>End Date</strong></th>
@@ -72,7 +74,9 @@
                                     <td hidden class="ids">{{ $offer->id }}</td>
                                     <td hidden class="category_id">{{$offer->category_id}}</td>
                                     <td class="category_name">{{$offer->category->name ?? ''}}</td>
+                                    <td class="image"><img src="{{ asset('images/offers/'.$offer->image) }}" width="75" alt="offer Image"></td>
                                     <td class="name"><strong>{{$offer->name}}</strong></td>
+                                    <td class="offer_code">{{$offer->offer_code}}</td>
                                     <td class="description">{{$offer->description}}</td>
                                     <td class="start_date">{{$offer->start_date}}</td>
                                     <td class="end_date">{{$offer->end_date}}</td>
@@ -162,6 +166,18 @@
                                         <input id="" name="point" class="form-control" type="number" value="0">
                                     </div>
                                 </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Offer Code <span class="text-danger">*</span></label>
+                                        <input id="" name="offer_code" class="form-control" type="text" value="" required>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Image</label>
+                                        <input id="" name="image" class="form-control" type="file" value="">
+                                    </div>
+                                </div>
                             </div>
                             <div class="submit-section">
                                 <button type="submit" class="btn btn-primary submit-btn">Add Now</button>
@@ -235,6 +251,18 @@
                                         <input id="e_point" name="point" class="form-control" type="number" value="0">
                                     </div>
                                 </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Offer Code <span class="text-danger">*</span></label>
+                                        <input id="e_offer_code" name="offer_code" class="form-control" type="text" value="" required>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Change image</label>
+                                        <input id="e_image" name="image" class="form-control" type="file" value="">
+                                    </div>
+                                </div>
                             </div>
                             <div class="submit-section">
                                 <button type="submit" class="btn btn-primary submit-btn">Update Now</button>
@@ -301,6 +329,7 @@
             $('#e_end_date').val(_this.find('.end_date').text());
             $('#e_discount').val(_this.find('.discount').text());
             $('#e_point').val(_this.find('.point').text());
+            $('#e_offer_code').val(_this.find('.offer_code').text());
 
             // category
             var category_id = (_this.find(".category_id").text());

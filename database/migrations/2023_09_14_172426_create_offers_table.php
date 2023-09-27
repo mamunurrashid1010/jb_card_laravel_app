@@ -23,6 +23,8 @@ return new class extends Migration
             $table->date('end_date')->nullable();
             $table->string('discount')->default(0);
             $table->integer('point')->default(0);
+            $table->string('offer_code')->nullable();
+            $table->text('image')->nullable();
             $table->string('status')->default('pending');
             $table->timestamps();
         });
