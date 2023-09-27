@@ -147,6 +147,9 @@ Route::post('merchant/offer/update',[OffersController::class,'update'])->middlew
 Route::get('/register', [RegisterController::class, 'register'])->name('register');
 Route::post('/register', [RegisterController::class, 'storeUser'])->name('register');
 
+# offer
+Route::get('customer/offer/index',[OffersController::class,'getCustomerOfferList'])->middleware('auth')->name('customer.offer.index');
+
 # profile
-Route::get('customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
-Route::post('customer/profile/update', [CustomerController::class, 'update'])->name('customer.profile.update');
+Route::get('customer/profile', [CustomerController::class, 'profile'])->middleware('auth')->name('customer.profile');
+Route::post('customer/profile/update', [CustomerController::class, 'update'])->middleware('auth')->name('customer.profile.update');

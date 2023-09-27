@@ -45,6 +45,27 @@
             @endif
             <!-- /error message -->
 
+            <!-- Search Filter -->
+            <form action="{{ route('merchant.offer.index') }}" method="GET">
+                @csrf
+                <div class="row filter-row">
+                    <div class="col-sm-6 col-md-3">
+                        <div class="form-group form-focus">
+                            <select class="select form-control" name="category_id">
+                                <option value=""> --Select category --</option>
+                                @foreach($categories as $category)
+                                    <option value="{{$category->id}}" @if(Request()->get('category_id') == $category->id) selected @endif>{{$category->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 col-md-2 col-lg-2">
+                        <button type="submit" class="btn btn-success btn-block"> Search </button>
+                    </div>
+                </div>
+            </form>
+            <!-- /Search Filter -->
+
             <!-- table data -->
             <div class="row pt-3">
                 <div class="col-md-12">
@@ -58,7 +79,7 @@
                                 <th><strong>Image</strong></th>
                                 <th><strong>Name</strong></th>
                                 <th><strong>Code</strong></th>
-                                <th><strong>Description</strong></th>
+                                <th style="width: 300px"><strong>Description</strong></th>
                                 <th><strong>Start Date</strong></th>
                                 <th><strong>End Date</strong></th>
                                 <th><strong>Discount</strong></th>
@@ -77,7 +98,7 @@
                                     <td class="image"><img src="{{ asset('images/offers/'.$offer->image) }}" width="75" alt="offer Image"></td>
                                     <td class="name"><strong>{{$offer->name}}</strong></td>
                                     <td class="offer_code">{{$offer->offer_code}}</td>
-                                    <td class="description">{{$offer->description}}</td>
+                                    <td class="description"><textarea class="w-100">{{$offer->description}}</textarea></td>
                                     <td class="start_date">{{$offer->start_date}}</td>
                                     <td class="end_date">{{$offer->end_date}}</td>
                                     <td class="discount">{{$offer->discount}}</td>

@@ -197,9 +197,16 @@
                             </i> <span> Dashboard</span></a>
                     </li>
                 @endif
+
+<!--------------------------------------------- Offer ----------------------------------------------------- -->
+                @if (Auth::user()->type=='Customer')
+                    <li> <a href="{{ route('customer.offer.index') }}" class=""><i class="la la-list-alt">
+                            </i> <span> Offer</span></a>
+                    </li>
+                @endif
 <!---------------------------------------------Profile----------------------------------------------------- -->
                 @if (Auth::user()->type=='Customer')
-                    <li> <a href="{{ route('customer.profile') }}" class="noti-dot active"><i class="la la-user">
+                    <li> <a href="{{ route('customer.profile') }}" class=""><i class="la la-user">
                             </i> <span> Profile</span></a>
                     </li>
                 @endif

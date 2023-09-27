@@ -23,7 +23,13 @@ class OffersController extends Controller
             if( Auth::user()->type=='Agent'){
                 $merchant_id = Auth::user()->merchant_id;
             }
-            $offers = Offers::query()->where('merchant_id',$merchant_id)->orderBy('id','desc')->simplePaginate(20);
+            $category_id = $request->category_id;
+            $offers = Offers::query()
+                ->where(function($q) use ($category_id){
+                    if($category_id)
+                        $q->where('category_id',$category_id);
+                })
+                ->where('merchant_id',$merchant_id)->orderBy('id','desc')->simplePaginate(20);
             $categories = Categories::query()->get();
             return view('merchantPanel.offer.index',compact('offers','categories'));
         }
@@ -148,7 +154,13 @@ class OffersController extends Controller
         $obj=new UserPermissionsController();
         $returnAccessStatus=$obj->moduleAccessPermission('Offer Manage');
         if( Auth::user()->type=='Admin' || $returnAccessStatus=='allow'){
-            $offers = Offers::query()->orderBy('id','desc')->simplePaginate(20);
+            $category_id = $request->category_id;
+            $offers = Offers::query()
+                ->where(function($q) use ($category_id){
+                    if($category_id)
+                        $q->where('category_id',$category_id);
+                })
+                ->orderBy('id','desc')->simplePaginate(20);
             $categories = Categories::query()->get();
             return view('offer.index',compact('offers','categories'));
         }
@@ -169,6 +181,27 @@ class OffersController extends Controller
         Toastr::success('Status Updated Successfully','Success');
         return redirect()->back();
     }
+
+
+# ------------------------------------------ Customer panel use ------------------------------------- #
+    function getCustomerOfferList(Request $request){
+        if( Auth::user()->type=='Customer'){
+            $category_id = $request->category_id;
+            $offers = Offers::query()
+                ->where(function($q) use ($category_id){
+                    if($category_id)
+                        $q->where('category_id',$category_id);
+                })
+                ->orderBy('id','desc')->where('status','active')->simplePaginate(30);
+            $categories = Categories::query()->get();
+            return view('customerPanel.offer.index',compact('offers','categories'));
+        }
+        else
+        {
+            return redirect()->route('home');
+        }
+    }
+
 
 
 }
