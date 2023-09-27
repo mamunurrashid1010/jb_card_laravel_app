@@ -140,6 +140,21 @@
 
                 @endif
 
+<!----------------------------------------- profile ------------------------------------------ -->
+                @if (Auth::user()->type=='Admin')
+                    <li> <a href="{{route('user.profile')}}"><i class="la la-user">
+                            </i> <span>Profile</span></a>
+                    </li>
+                @else
+                    <!-- profile -->
+                    @php $profile= in_array('Profile Manage',$arr);@endphp
+                    @if($profile>0)
+                        <li> <a href="{{route('user.profile')}}"><i class="la la-user">
+                                </i> <span>Profile</span></a>
+                        </li>
+                    @endif
+                @endif
+
 <!-- --------------------------------------- product ------------------------------------------ -->
 {{--                @if (Auth::user()->type=='Admin' || Auth::user()->type=='DeliveryAgent' )--}}
 {{--                    <li> <a href="{{route('product.index')}}"><i class="la la-building">--}}

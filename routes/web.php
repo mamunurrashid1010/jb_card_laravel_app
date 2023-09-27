@@ -104,6 +104,10 @@ Route::post('update', [UserManagementController::class, 'update'])->name('update
 Route::get('user/role/{userID?}',[UserManagementController::class,'roleUser'])->middleware('auth')->name('roleUser');
 Route::post('user/role/update',[UserManagementController::class,'userRoleUpdate'])->middleware('auth')->name('user/role/update');
 
+# profile
+Route::get('user/profile', [UserManagementController::class, 'profile'])->middleware('auth')->name('user.profile');
+Route::post('user/profile/update', [UserManagementController::class, 'profileUpdate'])->middleware('auth')->name('user.profile.update');
+
 # companies
 Route::get('company/view',[CompaniesController::class,'view'])->middleware('auth')->name('company/view');
 Route::post('company/update',[CompaniesController::class,'update'])->middleware('auth')->name('company/update');
@@ -111,8 +115,8 @@ Route::post('company/update',[CompaniesController::class,'update'])->middleware(
 
 
 // ----------------------------- user profile ------------------------------//
-Route::get('profile_user', [App\Http\Controllers\UserManagementController::class, 'profile'])->middleware('auth')->name('profile_user');
-Route::post('profile/information/save', [App\Http\Controllers\UserManagementController::class, 'profileInformation'])->name('profile/information/save');
+//Route::get('profile_user', [App\Http\Controllers\UserManagementController::class, 'profile'])->middleware('auth')->name('profile_user');
+//Route::post('profile/information/save', [App\Http\Controllers\UserManagementController::class, 'profileInformation'])->name('profile/information/save');
 
 
 // ----------------------------- forget password ----------------------------//

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\permissions;
 use App\Models\user_permissions;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Brian2694\Toastr\Facades\Toastr;
 use App\Models\User;
@@ -11,6 +12,7 @@ use App\Rules\MatchOldPassword;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Session;
 
@@ -109,31 +111,84 @@ class UserManagementController extends Controller
     // profile user
     public function profile()
     {
-        $user = Auth::User();
-        Session::put('user', $user);
-        $user=Session::get('user');
-        $profile = $user->rec_id;
-
-        $user = DB::table('users')->get();
-        $employees = DB::table('profile_information')->where('rec_id',$profile)->first();
-
-        if(empty($employees))
+        # get have module access permission
+        $obj=new UserPermissionsController();
+        $returnAccessStatus=$obj->moduleAccessPermission('Profile Manage');
+        if (Auth::user()->type=='Admin' || $returnAccessStatus=='allow')
         {
-            $information = DB::table('profile_information')->where('rec_id',$profile)->first();
-            return view('usermanagement.profile_user',compact('information','user'));
+            $users = User::query()->find(Auth::user()->id);
+            return view('usermanagement.profile',compact('users'));
+        }
+        else
+        {
+            return redirect()->route('home');
+        }
+    }
 
-        }else{
-            $rec_id = $employees->rec_id;
-            if($rec_id == $profile)
-            {
-                $information = DB::table('profile_information')->where('rec_id',$profile)->first();
-                return view('usermanagement.profile_user',compact('information','user'));
-            }else{
-                $information = ProfileInformation::all();
-                return view('usermanagement.profile_user',compact('information','user'));
+    function profileUpdate(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'name'      => 'required|string|max:255',
+            'phone'     => 'required',
+        ],
+            [
+                'name.required'      =>  'Name required!',
+                'phone.required'     =>  'Phone required!',
+            ]
+        );
+        $user_id = auth()->user()->id;
+
+        # image update
+        $oldInfo=User::query()->select('image','email')->where('id',$user_id)->first();
+        if (!empty($request->image))
+        {
+            $image = time().'.'.$request->image->extension();
+            $request->image->move(public_path('images/users/'), $image);
+            #delete old image
+            if (File::exists(public_path('images/users/'.$oldInfo->image))) {
+                File::delete(public_path('images/users/'.$oldInfo->image));
+            }
+        }
+        else{
+            $image=$oldInfo->image;
+        }
+
+        # email update
+        $email = $oldInfo->email;
+        if($request->email){
+            $emailExist = User::query()->where('email',$request->email)->exists();
+            if($emailExist){
+                Toastr::error('Email already exist!','Error');
+                return redirect()->back();
+            }
+            else
+                $email = $request->email;
+        }
+
+        $data = [
+            'name'      => $request->name,
+            'phone'     => $request->phone,
+            'address'   => $request->address,
+            'email'     => $email,
+            'image'     => $image,
+            'updated_at' => Carbon::now()
+        ];
+        User::query()->find($user_id)->update($data);
+
+        # password update
+        if($request->current_password && $request->password){
+            $checkPassword = Hash::check($request->current_password, auth()->user()->password);
+            if(!$checkPassword){
+                Toastr::error('Current password does not match!','Error');
+                return redirect()->back();
+            }
+            else{
+                User::query()->find($user_id)->update(['password'=> Hash::make($request->password)]);
             }
         }
 
+        Toastr::success('Data Updated Successfully','Success');
+        return redirect()->back();
     }
 
     // save profile information
