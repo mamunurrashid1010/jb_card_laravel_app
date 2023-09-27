@@ -112,13 +112,6 @@ Route::post('user/profile/update', [UserManagementController::class, 'profileUpd
 Route::get('company/view',[CompaniesController::class,'view'])->middleware('auth')->name('company/view');
 Route::post('company/update',[CompaniesController::class,'update'])->middleware('auth')->name('company/update');
 
-
-
-// ----------------------------- user profile ------------------------------//
-//Route::get('profile_user', [App\Http\Controllers\UserManagementController::class, 'profile'])->middleware('auth')->name('profile_user');
-//Route::post('profile/information/save', [App\Http\Controllers\UserManagementController::class, 'profileInformation'])->name('profile/information/save');
-
-
 // ----------------------------- forget password ----------------------------//
 Route::get('forget-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'getEmail'])->name('forget-password');
 Route::post('forget-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'postEmail'])->name('forget-password');

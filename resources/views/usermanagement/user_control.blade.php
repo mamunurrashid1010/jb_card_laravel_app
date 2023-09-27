@@ -92,9 +92,14 @@
                                 <tr>
                                     <td>{{$key+1}}</td>
                                     <td>
-                                        {{--   <span hidden class="image">{{ $user->avatar}}</span>--}}
                                         <h2 class="table-avatar">
-                                            <a href="#" class="avatar"><img src="{{ URL::to('/assets/img/user.jpg') }}" alt=""></a>
+                                            <a href="#" class="avatar">
+                                                @if($user->image)
+                                                    <img src="{{ asset('images/users/'.$user->image) }}" class="card-img-to" alt="profile_image">
+                                                @else
+                                                    <img src="{{ asset('/assets/img/user.jpg') }}" class="card-img-top" alt="profile_image">
+                                                @endif
+                                            </a>
                                             <a href="#" class="name">{{ $user->name }}</a>
                                         </h2>
                                     </td>
@@ -224,8 +229,8 @@
                                     </select>
                                 </div>
                                 <div class="col-sm-6">
-                                    {{--                                    <label>Photo</label>--}}
-                                    {{--                                    <input class="form-control" type="file" id="image" name="image">--}}
+                                    <label>Photo</label>
+                                    <input class="form-control" type="file" id="image" name="image">
                                 </div>
                             </div>
                             <div class="submit-section">
@@ -240,7 +245,7 @@
 
         <!-- Edit User Modal -->
         <div id="edit_user" class="modal custom-modal fade" role="dialog">
-            <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Edit User</h5>
@@ -289,9 +294,23 @@
                                     </select>
                                 </div>
                                 <div class="col-sm-6">
-{{--                                    <label>Photo</label>--}}
-{{--                                    <input class="form-control" type="file" id="image" name="images">--}}
-{{--                                    <input type="hidden" name="hidden_image" id="e_image" value="">--}}
+                                    <label>Change Photo</label>
+                                    <input class="form-control" type="file" id="image" name="image">
+                                </div>
+                            </div><br>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>New Password </label>
+                                        <input type="password" class="form-control" id="newPassword" name="password" placeholder="Enter new password">
+                                        <input type="checkbox" onclick="newPasswordShow()">Show Password
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Change Email</label>
+                                        <input name="new_email" class="form-control" type="email" value="" placeholder="Enter your new email">
+                                    </div>
                                 </div>
                             </div>
                             <br>
@@ -336,7 +355,8 @@
         <!-- /Delete User Modal -->
     </div>
     <!-- /Page Wrapper -->
-    @section('script')
+@endsection
+@section('script')
 {{--        <script>--}}
 {{--            $('#DataTable').DataTable();--}}
 {{--        </script>--}}
@@ -378,6 +398,17 @@
         //     $('.e_avatar').val(_this.find('.image').text());
         // });
     </script>
-    @endsection
+
+    <script>
+        //newPasswordShow
+        function newPasswordShow() {
+            var x = document.getElementById("newPassword");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+    </script>
 
 @endsection

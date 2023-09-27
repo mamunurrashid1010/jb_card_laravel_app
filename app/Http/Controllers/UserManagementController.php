@@ -278,13 +278,13 @@ class UserManagementController extends Controller
         DB::beginTransaction();
         try{
 
-//            if (!empty($request->image))
-//            {
-//                $image = time().'.'.$request->image->extension();
-//                $request->image->move(public_path('assets/images'), $image);
-//            }
-//            else
-//                $image='';
+            if (!empty($request->image))
+            {
+                $image = time().'.'.$request->image->extension();
+                $request->image->move(public_path('images/users/'), $image);
+            }
+            else
+                $image='';
 
             $user = new User;
             //$user->company_id   = 1;
@@ -293,7 +293,7 @@ class UserManagementController extends Controller
             $user->phone        = $request->phone;
             $user->type         = $request->role_name;
             $user->status       = $request->status;
-            //$user->avatar       = $image;
+            $user->image       = $image;
             $user->password     = Hash::make($request->password);
             $user->save();
             DB::commit();
@@ -317,26 +317,32 @@ class UserManagementController extends Controller
             $phone        = $request->phone;
             $status       = $request->status;
 
-            //$dt       = Carbon::now();
-            //$todayDate = $dt->toDayDateTimeString();
-//            $image_name = $request->hidden_image;
-//            $image = $request->file('images');
-//            if($image_name =='photo_defaults.jpg')
-//            {
-//                if($image != '')
-//                {
-//                    $image_name = rand() . '.' . $image->getClientOriginalExtension();
-//                    $image->move(public_path('/assets/images/'), $image_name);
-//                }
-//            }
-//            else{
-//
-//                if($image != '')
-//                {
-//                    $image_name = rand() . '.' . $image->getClientOriginalExtension();
-//                    $image->move(public_path('/assets/images/'), $image_name);
-//                }
-//            }
+            # image update
+            $oldInfo = User::query()->select('image','email')->where('id',$request->id)->first();
+            if (!empty($request->image))
+            {
+                $image = time().'.'.$request->image->extension();
+                $request->image->move(public_path('images/users/'), $image);
+                #delete old image
+                if (File::exists(public_path('images/users/'.$oldInfo->image))) {
+                    File::delete(public_path('images/users/'.$oldInfo->image));
+                }
+            }
+            else{
+                $image=$oldInfo->image;
+            }
+
+            # email update
+            $email = $oldInfo->email;
+            if($request->new_email){
+                $emailExist = User::query()->where('email',$request->new_email)->exists();
+                if($emailExist){
+                    Toastr::error('Email already exist!','Error');
+                    return redirect()->back();
+                }
+                else
+                    $email = $request->new_email;
+            }
 
             $update = [
                 'name'    => $name,
@@ -344,11 +350,16 @@ class UserManagementController extends Controller
                 'email'   => $email,
                 'phone'   => $phone,
                 'status'  => $status,
-                //'avatar'  => $image_name,
+                'image'   => $image,
             ];
 
+            User::query()->where('id',$request->id)->update($update);
 
-            User::where('id',$request->id)->update($update);
+            # password update
+            if($request->password){
+                User::query()->find($request->id)->update(['password'=> Hash::make($request->password)]);
+            }
+
             DB::commit();
             Toastr::success('User updated successfully :)','Success');
             return redirect()->route('userManagement');

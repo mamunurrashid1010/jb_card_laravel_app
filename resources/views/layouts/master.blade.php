@@ -81,8 +81,8 @@
 				<li class="nav-item dropdown has-arrow main-drop">
 					<a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
 						<span class="user-img">
-						@if(!empty(Auth::user()->avatar))
-							<img src="{{ URL::to('/assets/images/'. Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}">
+						@if(!empty(Auth::user()->image))
+							<img src="{{ asset('images/users/'.Auth::user()->image) }}" alt="{{ Auth::user()->name }}">
 						@else
 							<img src="{{asset('/assets/images/photo_defaults.jpg')}}" alt="{{ Auth::user()->name }}">
 						@endif
