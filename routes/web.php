@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AgentController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\CompaniesController;
@@ -136,6 +137,10 @@ Route::get('merchant/offer/index',[OffersController::class,'index'])->middleware
 Route::post('merchant/offer/store',[OffersController::class,'store'])->middleware('auth')->name('merchant.offer.store');
 Route::post('merchant/offer/update',[OffersController::class,'update'])->middleware('auth')->name('merchant.offer.update');
 
+# agent
+Route::get('merchant/agent/index',[AgentController::class,'index'])->middleware('auth')->name('merchant.agent.index');
+Route::post('merchant/agent/store',[AgentController::class,'store'])->middleware('auth')->name('merchant.agent.store');
+Route::post('merchant/agent/update',[AgentController::class,'update'])->middleware('auth')->name('merchant.agent.update');
 
 
 # ----------------------------------------------- Customer Panel ------------------------------------------------------#

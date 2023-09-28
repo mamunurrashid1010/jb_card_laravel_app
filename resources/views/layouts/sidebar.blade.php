@@ -190,16 +190,23 @@
 
 <!--------------------------------------------- Merchant ------------------------------------------------------->
 <!---------------------------------------------Dashboard----------------------------------------------------- -->
-                @if (Auth::user()->type=='Merchant')
+                @if (Auth::user()->type=='Merchant' || Auth::user()->type=='Agent')
                     <li> <a href="{{ route('home') }}" class="noti-dot active"><i class="la la-dashboard">
                             </i> <span> Dashboard</span></a>
                     </li>
                 @endif
 
 <!---------------------------------------------offer----------------------------------------------------- -->
-                @if (Auth::user()->type=='Merchant')
+                @if (Auth::user()->type=='Merchant' || Auth::user()->type=='Agent')
                     <li> <a href="{{ route('merchant.offer.index') }}"><i class="la la-list-alt">
                             </i> <span> Offer</span></a>
+                    </li>
+                @endif
+
+<!---------------------------------------------agent----------------------------------------------------- -->
+                @if (Auth::user()->type=='Merchant')
+                    <li> <a href="{{ route('merchant.agent.index') }}"><i class="la la-user-friends">
+                            </i> <span> Agent</span></a>
                     </li>
                 @endif
 
