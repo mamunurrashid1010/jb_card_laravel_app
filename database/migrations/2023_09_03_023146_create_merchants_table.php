@@ -19,12 +19,12 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->string('business_name');
             $table->string('owner_name')->nullable();
-            $table->string('email')->unique();
-            $table->string('phone')->nullable();
-            $table->text('address')->nullable();
+            //$table->string('email')->unique();
+            //$table->string('phone')->nullable();
+            //$table->text('address')->nullable();
             $table->string('contact_person_name')->nullable();
             $table->string('contact_person_phone')->nullable();
-            $table->string('password');
+            //$table->string('password');
             $table->timestamps();
         });
     }

@@ -71,6 +71,7 @@
                             <thead class="thead-light">
                             <tr>
                                 <th>#</th>
+                                <th><strong>Photo</strong></th>
                                 <th><strong>Business Name</strong></th>
                                 <th><strong>Owner Name</strong></th>
                                 <th><strong>Email</strong></th>
@@ -78,6 +79,7 @@
                                 <th><strong>Address</strong></th>
                                 <th><strong>C.P. Name</strong></th>
                                 <th><strong>C.P. Phone</strong></th>
+                                <th><strong>Status</strong></th>
                                 <th><strong>Package</strong></th>
                                 <th class="text-center"><strong>Action</strong></th>
                             </tr>
@@ -87,13 +89,21 @@
                                 <tr>
                                     <td>{{$key+1}}</td>
                                     <td hidden class="ids">{{ $merchant->id }}</td>
-                                    <td class="business_name"><strong>{{$merchant->business_name}}</strong></td>
-                                    <td class="owner_name">{{$merchant->owner_name}}</td>
+                                    <td class="photo">
+                                        @if($merchant->image)
+                                            <img src="{{ asset('images/users/'.$merchant->image) }}" class="card-img-to avatar" alt="profile_image">
+                                        @else
+                                            <img src="{{ asset('/assets/img/user.jpg') }}" class="card-img-top avatar" alt="profile_image">
+                                        @endif
+                                    </td>
+                                    <td class="business_name"><strong>{{$merchant->MerchantInfo->business_name}}</strong></td>
+                                    <td class="owner_name">{{$merchant->MerchantInfo->owner_name}}</td>
                                     <td class="email">{{$merchant->email}}</td>
                                     <td class="phone">{{$merchant->phone}}</td>
                                     <td class="address">{{$merchant->address}}</td>
-                                    <td class="contact_person_name">{{$merchant->contact_person_name}}</td>
-                                    <td class="contact_person_phone">{{$merchant->contact_person_phone}}</td>
+                                    <td class="contact_person_name">{{$merchant->MerchantInfo->contact_person_name}}</td>
+                                    <td class="contact_person_phone">{{$merchant->MerchantInfo->contact_person_phone}}</td>
+                                    <td class="statuss">{{ $merchant->status }}</td>
                                     <td class="packageList">
                                         @foreach($merchant->merchantPackage as $mp)
                                             <span class="badge badge-info">{{$mp->packageName->name ?? ''}}</span>
@@ -184,6 +194,10 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
+                                    <label>Photo</label>
+                                    <input class="form-control" type="file" id="image" name="image">
+                                </div>
+                                <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Package <span class="text-danger">*</span></label>
                                         <select class="select" name="package_id" id="package_id" required>
@@ -233,12 +247,6 @@
                                         <input type="text" id="e_owner_name" name="owner_name" class="form-control" value="" required>
                                     </div>
                                 </div>
-{{--                                <div class="col-sm-6">--}}
-{{--                                    <div class="form-group">--}}
-{{--                                        <label>Email <span class="text-danger">*</span></label>--}}
-{{--                                        <input type="email" id="" name="email" class="form-control" value="" required>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Phone <span class="text-danger">*</span></label>
@@ -246,10 +254,22 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
+                                    <label>Email <span class="text-danger">*</span></label>
+                                    <input class="form-control" type="text" name="email" id="e_email" value="" readonly/>
+                                </div>
+                                <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Address <span class="text-danger">*</span></label>
                                         <input type="text" id="e_address" name="address" class="form-control" value="" required>
                                     </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label>Status <span class="text-danger">*</span></label>
+                                    <select class="select" name="status" id="e_status">
+                                        <option selected disabled> --Select --</option>
+                                        <option value="active">active</option>
+                                        <option value="inactive">inactive</option>
+                                    </select>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
@@ -261,6 +281,23 @@
                                     <div class="form-group">
                                         <label>Contact Person Phone</label>
                                         <input type="text" id="e_contact_person_phone" name="contact_person_phone" class="form-control" value="">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label>Change Photo</label>
+                                    <input class="form-control" type="file" id="image" name="image">
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Change Email</label>
+                                        <input name="new_email" class="form-control" type="email" value="" placeholder="Enter your new email">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>New Password </label>
+                                        <input type="password" class="form-control" id="newPassword" name="password" placeholder="Enter new password">
+                                        <input type="checkbox" onclick="newPasswordShow()">Show Password
                                     </div>
                                 </div>
 {{--                                <div class="col-sm-6">--}}
@@ -343,9 +380,14 @@
             $('#e_business_name').val(_this.find('.business_name').text());
             $('#e_owner_name').val(_this.find('.owner_name').text());
             $('#e_phone').val(_this.find('.phone').text());
+            $('#e_email').val(_this.find('.email').text());
             $('#e_address').val(_this.find('.address').text());
             $('#e_contact_person_name').val(_this.find('.contact_person_name').text());
             $('#e_contact_person_phone').val(_this.find('.contact_person_phone').text());
+
+            var statuss = (_this.find(".statuss").text());
+            var _option = '<option selected value="' +statuss+ '">' + statuss + '</option>'
+            $( _option).appendTo("#e_status");
         });
     </script>
 

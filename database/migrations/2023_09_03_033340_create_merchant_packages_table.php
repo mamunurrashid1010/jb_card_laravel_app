@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('merchant_packages', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('merchant_id');
-            $table->foreign('merchant_id')->references('id')->on('merchants')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('merchant_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedBigInteger('package_id');
             $table->foreign('package_id')->references('id')->on('packages')->onDelete('cascade')->onUpdate('cascade');
             $table->string('status')->default('active');

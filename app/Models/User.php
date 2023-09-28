@@ -61,4 +61,12 @@ class User extends Authenticatable
         return $this->hasOne(CustomerPackages::class,'customer_id','id');
     }
 
+    function MerchantInfo(){
+        return $this->hasOne(Merchant::class,'user_id','id');
+    }
+
+    function merchantPackage(){
+        return $this->hasMany(MerchantPackage::class,'merchant_id','id');
+    }
+
 }

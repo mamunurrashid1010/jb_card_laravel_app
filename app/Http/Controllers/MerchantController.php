@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 
 class MerchantController extends Controller
@@ -25,11 +26,12 @@ class MerchantController extends Controller
         $returnAccessStatus=$obj->moduleAccessPermission('Merchant Manage');
         if( Auth::user()->type=='Admin' || $returnAccessStatus=='allow'){
             $email = $request->email;
-            $merchants = Merchant::query()
+            $merchants = User::query()
                 ->where(function ($q) use ($email){
                     if($email)
                         $q->where('email',$email);
                 })
+                ->where('type','Merchant')
                 ->orderBy('id','desc')->paginate(10);
             $packages = Packages::query()->get();
             return view('merchant.index',compact('merchants','packages'));
@@ -47,7 +49,7 @@ class MerchantController extends Controller
         $request->validate([
             'business_name' => 'required',
             'owner_name'    => 'required',
-            'email'         => 'required|email|max:255|unique:merchants',
+            'email'         => 'required|email|max:255|unique:users',
             'phone'         => 'required',
             'address'       => 'required',
             'password'      => 'required|string|min:5',
@@ -68,14 +70,27 @@ class MerchantController extends Controller
 
         DB::beginTransaction();
         try{
+            # image
+            if(!empty($request->image))
+            {
+                $image = time().'.'.$request->image->extension();
+                $request->image->move(public_path('images/users/'), $image);
+            }
+            else{
+                $image='';
+            }
+
+
             $password = Hash::make($request->password);
             # user(merchant) create
             $userId = User::query()->insertGetId([
                 'name'      => $request->business_name,
                 'email'     => $request->email,
                 'phone'     => $request->phone,
+                'address'   => $request->address,
                 'password'  => $password,
                 'type'      => 'Merchant',
+                'image'     => $image,
                 'created_at'=> Carbon::now(),
             ]);
             # merchant details
@@ -83,17 +98,17 @@ class MerchantController extends Controller
                 'user_id'               => $userId,
                 'business_name'         => $request->business_name,
                 'owner_name'            => $request->owner_name,
-                'email'                 => $request->email,
-                'phone'                 => $request->phone,
-                'address'               => $request->address,
+                //'email'                 => $request->email,
+                //'phone'                 => $request->phone,
+                //'address'               => $request->address,
                 'contact_person_name'   => $request->contact_person_name,
                 'contact_person_phone'  => $request->contact_person_phone,
-                'password'              => $password,
+                //'password'              => $password,
                 'created_at'            => Carbon::now(),
             ]);
             # merchant package add
             MerchantPackage::query()->create([
-                'merchant_id'   => $merchantId,
+                'merchant_id'   => $userId,
                 'package_id'    => $request->package_id,
             ]);
 
@@ -128,19 +143,69 @@ class MerchantController extends Controller
             ]
         );
 
-        $data=[
-            'business_name'         => $request->business_name,
-            'owner_name'            => $request->owner_name,
-            'phone'                 => $request->phone,
-            'address'               => $request->address,
-            'contact_person_name'   => $request->contact_person_name,
-            'contact_person_phone'  => $request->contact_person_phone,
-            'updated_at'            => Carbon::now()
-        ];
-        Merchant::query()->where('id',$request->id)->update($data);
+//        DB::beginTransaction();
+//        try{
 
-        Toastr::success('Data Updated Successfully','Success');
-        return redirect()->back();
+            # image update
+            $oldInfo = User::query()->select('image','email')->where('id',$request->id)->first();
+            if (!empty($request->image))
+            {
+                $image = time().'.'.$request->image->extension();
+                $request->image->move(public_path('images/users/'), $image);
+                #delete old image
+                if (File::exists(public_path('images/users/'.$oldInfo->image))) {
+                    File::delete(public_path('images/users/'.$oldInfo->image));
+                }
+            }
+            else{
+                $image=$oldInfo->image;
+            }
+
+            # email update
+            $email = $oldInfo->email;
+            if($request->new_email){
+                $emailExist = User::query()->where('email',$request->new_email)->exists();
+                if($emailExist){
+                    Toastr::error('Email already exist!','Error');
+                    return redirect()->back();
+                }
+                else
+                    $email = $request->new_email;
+            }
+
+            $update = [
+                'name'    => $request->business_name,
+                'email'   => $email,
+                'phone'   => $request->phone,
+                'address' => $request->address,
+                'status'  => $request->status,
+                'image'   => $image,
+                'updated_at'=> Carbon::now()
+            ];
+            User::query()->where('id',$request->id)->update($update);
+
+            $data=[
+                'business_name'         => $request->business_name,
+                'owner_name'            => $request->owner_name,
+                'contact_person_name'   => $request->contact_person_name,
+                'contact_person_phone'  => $request->contact_person_phone,
+                'updated_at'            => Carbon::now()
+            ];
+            Merchant::query()->where('user_id',$request->id)->update($data);
+
+            # password update
+            if($request->password){
+                User::query()->find($request->id)->update(['password'=> Hash::make($request->password)]);
+            }
+
+            Toastr::success('Data Updated Successfully!','Success');
+            return redirect()->back();
+//        }catch(\Exception $e){
+//            DB::rollback();
+//            Toastr::error('User update fail :)','Error');
+//            return redirect()->back();
+//        }
+
     }
 
 }

@@ -9,7 +9,7 @@ class Merchant extends Model
 {
     use HasFactory;
 
-    function merchantPackage(){
-        return $this->hasMany(MerchantPackage::class);
+    function user(){
+        return $this->belongsTo(User::class);
     }
 }
