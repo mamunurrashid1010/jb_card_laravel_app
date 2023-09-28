@@ -203,6 +203,13 @@
                     </li>
                 @endif
 
+<!--------------------------------------------- offer-transaction (reward) ----------------------------------------------------- -->
+                @if (Auth::user()->type=='Merchant' || Auth::user()->type=='Agent')
+                    <li> <a href="{{ route('merchant.offer.transaction.create') }}"><i class="la la-clipboard-list">
+                            </i> <span> Transaction (Reward)</span></a>
+                    </li>
+                @endif
+
 <!---------------------------------------------agent----------------------------------------------------- -->
                 @if (Auth::user()->type=='Merchant')
                     <li> <a href="{{ route('merchant.agent.index') }}"><i class="la la-user-friends">

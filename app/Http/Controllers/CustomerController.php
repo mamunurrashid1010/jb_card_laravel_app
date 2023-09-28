@@ -158,4 +158,24 @@ class CustomerController extends Controller
         return redirect()->back();
     }
 
+
+    /**
+     * getCustomerList_searchByName function
+     * return searchable customer id,name
+     */
+    function getCustomerList_searchByName(Request $request)
+    {
+        //$company_id=Auth::user()->company_id;
+        $data = [];
+        if($request->filled('q')){
+            $data = User::query()->select('name','id')
+                ->where('name', 'LIKE', '%'. $request->get('q'). '%')
+                //->where('company_id',$company_id)
+                ->where('type','Customer')
+                ->take(5)
+                ->get();
+        }
+        return response()->json($data);
+    }
+
 }

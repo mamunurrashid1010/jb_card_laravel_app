@@ -8,6 +8,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MerchantController;
 use App\Http\Controllers\OffersController;
+use App\Http\Controllers\OfferTransactionsController;
 use App\Http\Controllers\PackagesController;
 use App\Http\Controllers\ProductsController;
 use Illuminate\Support\Facades\Auth;
@@ -137,6 +138,9 @@ Route::get('merchant/offer/index',[OffersController::class,'index'])->middleware
 Route::post('merchant/offer/store',[OffersController::class,'store'])->middleware('auth')->name('merchant.offer.store');
 Route::post('merchant/offer/update',[OffersController::class,'update'])->middleware('auth')->name('merchant.offer.update');
 
+# offer-transaction (reward)
+Route::get('merchant/offer/transaction/create',[OfferTransactionsController::class,'create'])->middleware('auth')->name('merchant.offer.transaction.create');
+
 # agent
 Route::get('merchant/agent/index',[AgentController::class,'index'])->middleware('auth')->name('merchant.agent.index');
 Route::post('merchant/agent/store',[AgentController::class,'store'])->middleware('auth')->name('merchant.agent.store');
@@ -155,3 +159,4 @@ Route::get('customer/offer/index',[OffersController::class,'getCustomerOfferList
 # profile
 Route::get('customer/profile', [CustomerController::class, 'profile'])->middleware('auth')->name('customer.profile');
 Route::post('customer/profile/update', [CustomerController::class, 'update'])->middleware('auth')->name('customer.profile.update');
+Route::get('getCustomerList_searchByName', [CustomerController::class, 'getCustomerList_searchByName'])->middleware('auth')->name('getCustomerList_searchByName');
