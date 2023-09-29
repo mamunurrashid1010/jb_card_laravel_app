@@ -158,7 +158,7 @@ class CustomerController extends Controller
         return redirect()->back();
     }
 
-
+    /* ---------------------------------------- Merchant panel use ------------------------------------------------- */
     /**
      * getCustomerList_searchByName function
      * return searchable customer id,name
@@ -176,6 +176,20 @@ class CustomerController extends Controller
                 ->get();
         }
         return response()->json($data);
+    }
+
+    /**
+     * getCustomerDetails
+     */
+    function getCustomerDetails(Request $request)
+    {
+        $customer_id = $request->customerId;
+        $customer = User::query()
+            ->where('id',$customer_id)
+            ->where('type','Customer')
+            ->where('status','active')
+            ->first();
+        return response()->json($customer);
     }
 
 }

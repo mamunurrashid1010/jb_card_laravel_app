@@ -137,9 +137,14 @@ Route::post('change/password/db', [App\Http\Controllers\UserManagementController
 Route::get('merchant/offer/index',[OffersController::class,'index'])->middleware('auth')->name('merchant.offer.index');
 Route::post('merchant/offer/store',[OffersController::class,'store'])->middleware('auth')->name('merchant.offer.store');
 Route::post('merchant/offer/update',[OffersController::class,'update'])->middleware('auth')->name('merchant.offer.update');
+Route::get('getOfferList_searchByName', [OffersController::class, 'getOfferList_searchByName'])->middleware('auth')->name('getOfferList_searchByName');
+Route::get('getOfferDetails/{offerId}', [OffersController::class, 'getOfferDetails'])->middleware('auth')->name('getOfferDetails');
 
 # offer-transaction (reward)
 Route::get('merchant/offer/transaction/create',[OfferTransactionsController::class,'create'])->middleware('auth')->name('merchant.offer.transaction.create');
+Route::post('merchant/offer/transaction/store',[OfferTransactionsController::class,'store'])->middleware('auth')->name('merchant.offer.transaction.store');
+# get customer details
+Route::get('merchant/getCustomerDetails/{customerId}',[CustomerController::class,'getCustomerDetails'])->middleware('auth')->name('merchant.getCustomerDetails');
 
 # agent
 Route::get('merchant/agent/index',[AgentController::class,'index'])->middleware('auth')->name('merchant.agent.index');

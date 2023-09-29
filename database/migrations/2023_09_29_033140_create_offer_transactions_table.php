@@ -17,11 +17,13 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('customer_id');
             $table->unsignedBigInteger('offer_id');
+            $table->unsignedBigInteger('merchant_id');
             $table->unsignedBigInteger('user_id')->comment('created_by');
             $table->text('invoice_no')->nullable();
             $table->float('amount')->default(0);
             $table->string('discount')->default(0);
             $table->float('point')->default(0);
+            $table->string('point_status')->default('none');
             $table->text('details')->nullable();
             $table->string('status')->default('pending');
             $table->timestamps();

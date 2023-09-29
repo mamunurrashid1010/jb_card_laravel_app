@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\File;
 
 class OffersController extends Controller
 {
+    # ------------------------------------------ Merchant panel use ------------------------------------- #
     /**
      * index
      */
@@ -146,6 +147,35 @@ class OffersController extends Controller
 
         Toastr::success('Data Updated Successfully','Success');
         return redirect()->back();
+    }
+
+    /**
+     * getOfferList_searchByName
+     */
+    function getOfferList_searchByName(Request $request)
+    {
+        $data = [];
+        if($request->filled('q')){
+            $data = Offers::query()
+                ->where('name', 'LIKE', '%'. $request->get('q'). '%')
+                ->where('status','active')
+                ->take(5)
+                ->get();
+        }
+        return response()->json($data);
+    }
+
+    /**
+     * getOfferDetails
+     */
+    function getOfferDetails(Request $request)
+    {
+        $offer_id = $request->offerId;
+        $offer = Offers::query()
+            ->where('id',$offer_id)
+            ->where('status','active')
+            ->first();
+        return response()->json($offer);
     }
 
 # ------------------------------------------ Admin panel use ------------------------------------- #
