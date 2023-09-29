@@ -71,6 +71,7 @@
                                         <p id="customerName"></p>
                                         <p id="customerPhone"></p>
                                         <p id="customerEmail"></p>
+                                        <h3 id="customer_MerchantWiseWalletPoint" class="text-success"></h3>
                                     </div>
                                 </div>
                             </div>
@@ -87,9 +88,9 @@
                                         <span id="offerName"></span><br>
                                         <span id="offerCode"></span><br>
                                         <span id="offerStart"></span><br>
-                                        <span id="offerEnd"></span><br>
-                                        <span id="offerDiscount"></span><br>
-                                        <span id="offerPoint"></span><br><br>
+                                        <span id="offerEnd"></span><br><br>
+                                        <span id="offerDiscount" class="font-18 text-success"></span><br>
+                                        <span id="offerPoint" class="font-18 text-success"></span><br><br>
                                         <span id="offerDescription"></span><br>
                                     </div>
                                 </div>
@@ -185,6 +186,7 @@
                             $('#customerName').text("Name: "+res.data.name);
                             $('#customerPhone').text("Phone: "+res.data.phone);
                             $('#customerEmail').text("Email: "+res.data.email);
+                            $('#customer_MerchantWiseWalletPoint').text("Wallet Point: "+res.data.merchantWiseWalletPoint);
                         })
                         .catch(error=>{
                             $('#customerName').text();

@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class OfferTransactions extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['customer_id','point'];
 }

@@ -165,13 +165,12 @@ class CustomerController extends Controller
      */
     function getCustomerList_searchByName(Request $request)
     {
-        //$company_id=Auth::user()->company_id;
         $data = [];
         if($request->filled('q')){
             $data = User::query()->select('name','id')
                 ->where('name', 'LIKE', '%'. $request->get('q'). '%')
-                //->where('company_id',$company_id)
                 ->where('type','Customer')
+                ->where('status','active')
                 ->take(5)
                 ->get();
         }
@@ -183,12 +182,24 @@ class CustomerController extends Controller
      */
     function getCustomerDetails(Request $request)
     {
+        $merchant_id = Auth::user()->id;
+        if(Auth::user()->type=='Agent'){
+            $merchant_id = Auth::user()->merchant_id;
+        }
+
         $customer_id = $request->customerId;
         $customer = User::query()
+            ->with('merchantWiseWallet',function ($q) use ($merchant_id){
+                $q->where('merchant_id',$merchant_id);
+                $q->where('point_status','add');
+                $q->where('status','confirm');
+            })
             ->where('id',$customer_id)
             ->where('type','Customer')
             ->where('status','active')
             ->first();
+        $merchantWiseWalletPoint = $customer->merchantWiseWallet->sum('point');
+        $customer['merchantWiseWalletPoint'] = $merchantWiseWalletPoint;
         return response()->json($customer);
     }
 

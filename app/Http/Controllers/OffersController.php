@@ -154,10 +154,16 @@ class OffersController extends Controller
      */
     function getOfferList_searchByName(Request $request)
     {
+        $merchant_id = Auth::user()->id;
+        if(Auth::user()->type=='Agent'){
+            $merchant_id = Auth::user()->merchant_id;
+        }
+
         $data = [];
         if($request->filled('q')){
             $data = Offers::query()
                 ->where('name', 'LIKE', '%'. $request->get('q'). '%')
+                ->where('merchant_id',$merchant_id)
                 ->where('status','active')
                 ->take(5)
                 ->get();

@@ -69,4 +69,8 @@ class User extends Authenticatable
         return $this->hasMany(MerchantPackage::class,'merchant_id','id');
     }
 
+    function merchantWiseWallet(){
+        return $this->hasMany(OfferTransactions::class,'customer_id','id');
+    }
+
 }
