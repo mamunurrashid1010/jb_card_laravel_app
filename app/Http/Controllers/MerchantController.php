@@ -208,4 +208,18 @@ class MerchantController extends Controller
 
     }
 
+
+    # ------------------------------------------ Merchant panel use ------------------------------------- #
+    function profile()
+    {
+        if( Auth::user()->type=='Merchant' || Auth::user()->type=='Agent'){
+            $profile = User::query()->find(Auth::user()->id);
+            return view('merchantPanel.profile.index',compact('profile'));
+        }
+        else
+        {
+            return redirect()->route('home');
+        }
+    }
+
 }

@@ -146,6 +146,9 @@ Route::get('merchant/agent/index',[AgentController::class,'index'])->middleware(
 Route::post('merchant/agent/store',[AgentController::class,'store'])->middleware('auth')->name('merchant.agent.store');
 Route::post('merchant/agent/update',[AgentController::class,'update'])->middleware('auth')->name('merchant.agent.update');
 
+# profile
+Route::get('merchant/profile', [MerchantController::class, 'profile'])->middleware('auth')->name('merchant.profile');
+
 
 # ----------------------------------------------- Customer Panel ------------------------------------------------------#
 # Customer register

@@ -217,6 +217,13 @@
                     </li>
                 @endif
 
+<!---------------------------------------------Profile----------------------------------------------------- -->
+                @if (Auth::user()->type=='Merchant' || Auth::user()->type=='Agent')
+                    <li> <a href="{{ route('merchant.profile') }}" class=""><i class="la la-user">
+                            </i> <span> Profile</span></a>
+                    </li>
+                @endif
+
 
 
 <!--------------------------------------------- Customer ------------------------------------------------------->
