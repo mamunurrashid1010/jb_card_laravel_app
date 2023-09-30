@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -17,6 +18,7 @@ class AgentController extends Controller
         if(Auth::user()->type=='Merchant'){
             $merchant_id = Auth::user()->id;
             $agents = User::query()->where('merchant_id',$merchant_id)->orderBy('id','desc')->get();
+            //dd($agents[0]->totalTransactionStoreToday->sum('amount'));
             return view('merchantPanel.agent.index',compact('agents'));
         }
         else

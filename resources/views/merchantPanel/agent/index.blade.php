@@ -70,6 +70,8 @@
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Phone</th>
+                                    <th>Today Sale</th>
+                                    <th>Total Sale</th>
                                     <th>Status</th>
                                     <th class="text-right">Action</th>
                                 </tr>
@@ -93,6 +95,8 @@
                                     <td hidden class="ids">{{ $user->id }}</td>
                                     <td class="email">{{ $user->email }}</td>
                                     <td class="phone_number">{{ $user->phone ?? '' }}</td>
+                                    <td class="total_sale"><span class="badge badge-success font-weight-bold font-18">${{ $user->totalTransactionStoreToday->sum('amount') }}</span></td>
+                                    <td class="total_sale"><span class="badge badge-info font-weight-bold font-18">${{ $user->totalTransactionStore->sum('amount') }}</span></td>
                                     <td class="statuss">{{ $user->status }}</td>
                                     <td class="text-right">
                                         <a class="userUpdate" data-toggle="modal" data-id="'.$user->id.'" data-target="#edit_user"><button class="btn btn-warning"><i class="fa fa-pencil fa-sm"></i>Edit</button></a>

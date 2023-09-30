@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -71,6 +72,13 @@ class User extends Authenticatable
 
     function merchantWiseWallet(){
         return $this->hasMany(OfferTransactions::class,'customer_id','id');
+    }
+
+    function totalTransactionStore(){
+        return $this->hasMany(OfferTransactions::class,'user_id','id')->where('status','confirm');
+    }
+    function totalTransactionStoreToday(){
+        return $this->hasMany(OfferTransactions::class,'user_id','id')->where('status','confirm')->whereDate('created_at',Carbon::today());
     }
 
 }
