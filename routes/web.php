@@ -11,6 +11,7 @@ use App\Http\Controllers\OffersController;
 use App\Http\Controllers\OfferTransactionsController;
 use App\Http\Controllers\PackagesController;
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\TransactionReportController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
@@ -145,6 +146,9 @@ Route::get('merchant/offer/transaction/create',[OfferTransactionsController::cla
 Route::post('merchant/offer/transaction/store',[OfferTransactionsController::class,'store'])->middleware('auth')->name('merchant.offer.transaction.store');
 # get customer details
 Route::get('merchant/getCustomerDetails/{customerId}',[CustomerController::class,'getCustomerDetails'])->middleware('auth')->name('merchant.getCustomerDetails');
+
+# transaction report
+Route::get('merchant/offer/transaction/report',[TransactionReportController::class,'index'])->middleware('auth')->name('merchant.offer.transaction.report.index');
 
 # agent
 Route::get('merchant/agent/index',[AgentController::class,'index'])->middleware('auth')->name('merchant.agent.index');

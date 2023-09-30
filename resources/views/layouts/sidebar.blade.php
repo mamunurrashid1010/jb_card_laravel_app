@@ -210,6 +210,16 @@
                     </li>
                 @endif
 
+<!---------------------------------------------report----------------------------------------------------- -->
+                <li class="submenu">
+                    <a href="#">
+                        <i class="la la-chart-area"></i> <span> Report</span> <span class="menu-arrow"></span>
+                    </a>
+                    <ul style="display: none;">
+                        <li><a href="{{ route('merchant.offer.transaction.report.index') }}">Transaction report</a></li>
+                    </ul>
+                </li>
+
 <!---------------------------------------------agent----------------------------------------------------- -->
                 @if (Auth::user()->type=='Merchant')
                     <li> <a href="{{ route('merchant.agent.index') }}"><i class="la la-user-friends">

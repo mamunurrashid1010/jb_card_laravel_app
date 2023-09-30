@@ -191,15 +191,17 @@ class CustomerController extends Controller
         $customer = User::query()
             ->with('merchantWiseWallet',function ($q) use ($merchant_id){
                 $q->where('merchant_id',$merchant_id);
-                $q->where('point_status','add');
                 $q->where('status','confirm');
             })
             ->where('id',$customer_id)
             ->where('type','Customer')
             ->where('status','active')
             ->first();
-        $merchantWiseWalletPoint = $customer->merchantWiseWallet->sum('point');
-        $customer['merchantWiseWalletPoint'] = $merchantWiseWalletPoint;
+        # wallet point calculation
+        $merchantWiseWalletPoint_add = $customer->merchantWiseWallet->where('point_status','add')->sum('point');
+        $merchantWiseWalletPoint_deduction = $customer->merchantWiseWallet->where('point_status','deduction')->sum('point');
+        $customer['merchantWiseWalletPoint'] = ($merchantWiseWalletPoint_add - $merchantWiseWalletPoint_deduction);
+
         return response()->json($customer);
     }
 
