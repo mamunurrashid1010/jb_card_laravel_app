@@ -168,6 +168,10 @@ Route::post('/register', [RegisterController::class, 'storeUser'])->name('regist
 # offer
 Route::get('customer/offer/index',[OffersController::class,'getCustomerOfferList'])->middleware('auth')->name('customer.offer.index');
 
+# transaction history
+Route::get('customer/offer/transaction/history',[TransactionReportController::class,'customerOfferTransactionHistory'])->middleware('auth')->name('customer.offer.transaction.history');
+
+
 # profile
 Route::get('customer/profile', [CustomerController::class, 'profile'])->middleware('auth')->name('customer.profile');
 Route::post('customer/profile/update', [CustomerController::class, 'update'])->middleware('auth')->name('customer.profile.update');

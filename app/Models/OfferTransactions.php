@@ -22,4 +22,8 @@ class OfferTransactions extends Model
     function userInfo(){
         return $this->belongsTo(User::class,'user_id','id');
     }
+
+    function merchantInfo(){
+        return $this->belongsTo(User::class,'merchant_id','id');
+    }
 }

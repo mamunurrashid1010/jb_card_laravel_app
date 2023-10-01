@@ -211,6 +211,7 @@
                 @endif
 
 <!---------------------------------------------report----------------------------------------------------- -->
+                @if (Auth::user()->type=='Merchant' || Auth::user()->type=='Agent')
                 <li class="submenu">
                     <a href="#">
                         <i class="la la-chart-area"></i> <span> Report</span> <span class="menu-arrow"></span>
@@ -219,6 +220,7 @@
                         <li><a href="{{ route('merchant.offer.transaction.report.index') }}">Transaction report</a></li>
                     </ul>
                 </li>
+                @endif
 
 <!---------------------------------------------agent----------------------------------------------------- -->
                 @if (Auth::user()->type=='Merchant')
@@ -243,11 +245,16 @@
                             </i> <span> Dashboard</span></a>
                     </li>
                 @endif
-
 <!--------------------------------------------- Offer ----------------------------------------------------- -->
                 @if (Auth::user()->type=='Customer')
                     <li> <a href="{{ route('customer.offer.index') }}" class=""><i class="la la-list-alt">
                             </i> <span> Offer</span></a>
+                    </li>
+                @endif
+<!--------------------------------------------- Transaction history ----------------------------------------------------- -->
+                @if (Auth::user()->type=='Customer')
+                    <li> <a href="{{ route('customer.offer.transaction.history') }}" class=""><i class="la la-clipboard-list">
+                            </i> <span> Transaction History</span></a>
                     </li>
                 @endif
 <!---------------------------------------------Profile----------------------------------------------------- -->

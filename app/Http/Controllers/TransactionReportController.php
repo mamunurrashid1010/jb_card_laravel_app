@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class TransactionReportController extends Controller
 {
+    # ------------------------------------------ Merchant panel use ------------------------------------- #
     function index(Request $request){
         if(Auth::user()->type=='Merchant' || Auth::user()->type=='Agent'){
             $merchant_id = Auth::user()->id;
@@ -18,11 +19,14 @@ class TransactionReportController extends Controller
 
             $agents = User::query()->where('merchant_id',$merchant_id)->get();
 
+            $invoice_no = $request->invoice_no;
             $agent_id = $request->agent_id;
             $fromDate=$request->fromDate;
             $toDate=$request->toDate;
             $transactionReport = OfferTransactions::query()
-                ->where(function ($q) use ($agent_id,$fromDate,$toDate){
+                ->where(function ($q) use ($agent_id,$fromDate,$toDate,$invoice_no){
+                    if($invoice_no)
+                        $q->where('invoice_no',$invoice_no);
                     if($agent_id)
                         $q->where('user_id',$agent_id);
                     if(!empty($fromDate) && !empty($toDate))
@@ -38,4 +42,28 @@ class TransactionReportController extends Controller
             return redirect()->route('home');
         }
     }
+
+    # ------------------------------------------ Customer panel use ------------------------------------- #
+    function customerOfferTransactionHistory(Request $request){
+        if(Auth::user()->type=='Customer')
+        {
+            $customer_id = Auth::user()->id;
+            $invoice_no = $request->invoice_no;
+
+            $transactionHistory = OfferTransactions::query()
+                ->where(function($q) use ($invoice_no){
+                    if($invoice_no)
+                        $q->where('invoice_no',$invoice_no);
+                })
+                ->where('customer_id',$customer_id)
+                ->orderBy('id','desc')->simplePaginate(30);
+
+            return view('customerPanel.transactionHistory.index',compact('transactionHistory'));
+        }
+        else
+        {
+            return redirect()->route('home');
+        }
+    }
+
 }

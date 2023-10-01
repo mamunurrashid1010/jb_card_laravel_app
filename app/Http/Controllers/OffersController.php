@@ -25,10 +25,13 @@ class OffersController extends Controller
                 $merchant_id = Auth::user()->merchant_id;
             }
             $category_id = $request->category_id;
+            $offer_code = $request->offer_code;
             $offers = Offers::query()
-                ->where(function($q) use ($category_id){
+                ->where(function($q) use ($category_id,$offer_code){
                     if($category_id)
                         $q->where('category_id',$category_id);
+                    if($offer_code)
+                        $q->where('offer_code',$offer_code);
                 })
                 ->where('merchant_id',$merchant_id)->orderBy('id','desc')->simplePaginate(20);
             $categories = Categories::query()->get();
@@ -223,10 +226,13 @@ class OffersController extends Controller
     function getCustomerOfferList(Request $request){
         if( Auth::user()->type=='Customer'){
             $category_id = $request->category_id;
+            $offer_code = $request->offer_code;
             $offers = Offers::query()
-                ->where(function($q) use ($category_id){
+                ->where(function($q) use ($category_id,$offer_code){
                     if($category_id)
                         $q->where('category_id',$category_id);
+                    if($offer_code)
+                        $q->where('name',$offer_code);
                 })
                 ->orderBy('id','desc')->where('status','active')->simplePaginate(30);
             $categories = Categories::query()->get();

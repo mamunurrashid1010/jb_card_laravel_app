@@ -51,6 +51,7 @@
                 <div class="row filter-row">
                     <div class="col-sm-6 col-md-3">
                         <div class="form-group form-focus">
+                            <label>Category</label>
                             <select class="select form-control" name="category_id">
                                 <option value=""> --Select category --</option>
                                 @foreach($categories as $category)
@@ -59,8 +60,14 @@
                             </select>
                         </div>
                     </div>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="form-group form-focus">
+                            <label>Offer Code</label>
+                            <input id="" name="offer_code" class="form-control" type="text" value="{{Request()->get('offer_code')}}">
+                        </div>
+                    </div>
                     <div class="col-sm-2 col-md-2 col-lg-2">
-                        <button type="submit" class="btn btn-success btn-block"> Search </button>
+                        <button type="submit" class="btn btn-success btn-block"  style="margin-top: 28px"> Search </button>
                     </div>
                 </div>
             </form>
