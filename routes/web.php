@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\CustomerWalletController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MerchantController;
 use App\Http\Controllers\OffersController;
@@ -171,6 +172,8 @@ Route::get('customer/offer/index',[OffersController::class,'getCustomerOfferList
 # transaction history
 Route::get('customer/offer/transaction/history',[TransactionReportController::class,'customerOfferTransactionHistory'])->middleware('auth')->name('customer.offer.transaction.history');
 
+# wallet
+Route::get('customer/wallet',[CustomerWalletController::class,'wallet'])->middleware('auth')->name('customer.wallet');
 
 # profile
 Route::get('customer/profile', [CustomerController::class, 'profile'])->middleware('auth')->name('customer.profile');

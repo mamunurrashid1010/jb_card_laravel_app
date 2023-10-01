@@ -81,4 +81,8 @@ class User extends Authenticatable
         return $this->hasMany(OfferTransactions::class,'user_id','id')->where('status','confirm')->whereDate('created_at',Carbon::today());
     }
 
+    function merchantTransactions(){
+        return $this->hasMany(OfferTransactions::class,'merchant_id','id');
+    }
+
 }

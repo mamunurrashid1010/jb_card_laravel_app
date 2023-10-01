@@ -257,6 +257,12 @@
                             </i> <span> Transaction History</span></a>
                     </li>
                 @endif
+<!--------------------------------------------- Wallet ----------------------------------------------------- -->
+                @if (Auth::user()->type=='Customer')
+                    <li> <a href="{{ route('customer.wallet') }}" class=""><i class="la la-wallet">
+                            </i> <span> Wallet Point</span></a>
+                    </li>
+                @endif
 <!---------------------------------------------Profile----------------------------------------------------- -->
                 @if (Auth::user()->type=='Customer')
                     <li> <a href="{{ route('customer.profile') }}" class=""><i class="la la-user">
