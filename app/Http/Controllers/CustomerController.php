@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\CustomerPackages;
+use App\Models\Packages;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 
@@ -32,11 +34,11 @@ class CustomerController extends Controller
     }
 
     /**
-     * update
+     * profileUpdate
      * @param Request $request
      * @return RedirectResponse
      */
-    function update(Request $request): RedirectResponse
+    function profileUpdate(Request $request): RedirectResponse
     {
         $request->validate([
             'name'      => 'required|string|max:255',
@@ -120,11 +122,133 @@ class CustomerController extends Controller
                 })
                 ->where('type','Customer')
                 ->orderBy('id','desc')->paginate(10);
-            return view('customer.index',compact('customers'));
+            $packages = Packages::query()->get();
+            return view('customer.index',compact('customers','packages'));
         }
         else
         {
             return redirect()->route('home');
+        }
+    }
+
+    /**
+     * new customer info store form admin panel
+     */
+    function store(Request $request)
+    {
+        $request->validate([
+            'name'      => 'required|string|max:255',
+            'email'     => 'required|string|email|max:255|unique:users',
+            'phone'     => 'required',
+            'password'  => 'required|string|min:5|confirmed',
+            'password_confirmation' => 'required',
+            'package'   => 'required',
+        ]);
+
+        DB::beginTransaction();
+        try{
+
+            if (!empty($request->image))
+            {
+                $image = time().'.'.$request->image->extension();
+                $request->image->move(public_path('images/users/'), $image);
+            }
+            else
+                $image='';
+
+            # customer registration
+            $regStatus=User::query()->create([
+                'name'      => $request->name,
+                'email'     => $request->email,
+                'phone'     => $request->phone,
+                'type'      => 'Customer',
+                'image'     => $image,
+                'password'  => Hash::make($request->password),
+                'created_at' => Carbon::now(),
+            ]);
+            # customer package
+            CustomerPackages::query()->create([
+                'customer_id' => $regStatus->id,
+                'package_id'  => $request->package,
+                'status'      => 'active',
+            ]);
+
+            DB::commit();
+            Toastr::success('Create new account successfully :)','Success');
+            return redirect()->back();
+        }
+        catch(\Exception $e){
+            DB::rollback();
+            //dd($e);
+            Toastr::error('Fail :)','Error');
+            return redirect()->back();
+        }
+    }
+
+    /**
+     * update, customer info update from admin panel
+     */
+    function update(Request $request)
+    {
+        DB::beginTransaction();
+        try{
+            $name         = $request->name;
+            //$email        = $request->email;
+            $phone        = $request->phone;
+            //$status       = $request->status;
+
+            # image update
+            $oldInfo = User::query()->select('image','email')->where('id',$request->id)->first();
+            if (!empty($request->image))
+            {
+                $image = time().'.'.$request->image->extension();
+                $request->image->move(public_path('images/users/'), $image);
+                #delete old image
+                if (File::exists(public_path('images/users/'.$oldInfo->image))){
+                    File::delete(public_path('images/users/'.$oldInfo->image));
+                }
+            }
+            else{
+                $image=$oldInfo->image ?? '';
+            }
+
+            # email update
+            $email = $oldInfo->email;
+            if($request->new_email){
+                $emailExist = User::query()->where('email',$request->new_email)->exists();
+                if($emailExist){
+                    Toastr::error('Email already exist!','Error');
+                    return redirect()->back();
+                }
+                else
+                    $email = $request->new_email;
+            }
+
+            $update = [
+                'name'    => $name,
+                'email'   => $email,
+                'phone'   => $phone,
+                //'status'  => $status,
+                'image'   => $image,
+                'updated_at'=>Carbon::now(),
+            ];
+
+            User::query()->where('id',$request->id)->update($update);
+
+            # password update
+            if($request->password){
+                User::query()->find($request->id)->update(['password'=> Hash::make($request->password)]);
+            }
+
+            DB::commit();
+            Toastr::success('Updated successfully :)','Success');
+            return redirect()->back();
+
+        }catch(\Exception $e){
+            DB::rollback();
+            dd($e);
+            Toastr::error('User update fail :)','Error');
+            return redirect()->back();
         }
     }
 

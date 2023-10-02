@@ -322,7 +322,7 @@
                 </div>
             </div>
         </div>
-        <!-- /Edit Salary Modal -->
+        <!-- /Edit Modal -->
 
         <!-- Delete User Modal -->
 {{--        <div class="modal custom-modal fade" id="delete_user" role="dialog">--}}

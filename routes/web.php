@@ -177,5 +177,5 @@ Route::get('customer/wallet',[CustomerWalletController::class,'wallet'])->middle
 
 # profile
 Route::get('customer/profile', [CustomerController::class, 'profile'])->middleware('auth')->name('customer.profile');
-Route::post('customer/profile/update', [CustomerController::class, 'update'])->middleware('auth')->name('customer.profile.update');
+Route::post('customer/profile/update', [CustomerController::class, 'profileUpdate'])->middleware('auth')->name('customer.profile.update');
 Route::get('getCustomerList_searchByName', [CustomerController::class, 'getCustomerList_searchByName'])->middleware('auth')->name('getCustomerList_searchByName');
