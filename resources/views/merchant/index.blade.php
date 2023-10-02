@@ -76,6 +76,8 @@
                                 <th><strong>Owner Name</strong></th>
                                 <th><strong>Email</strong></th>
                                 <th><strong>Phone</strong></th>
+                                <th><strong>Transactions</strong></th>
+                                <th><strong>Offers</strong></th>
                                 <th><strong>Address</strong></th>
                                 <th><strong>C.P. Name</strong></th>
                                 <th><strong>C.P. Phone</strong></th>
@@ -100,6 +102,8 @@
                                     <td class="owner_name">{{$merchant->MerchantInfo->owner_name}}</td>
                                     <td class="email">{{$merchant->email}}</td>
                                     <td class="phone">{{$merchant->phone}}</td>
+                                    <td class="total_transaction"><span class="badge badge-purple text-white font-18">{{ $merchant->merchantTransactions->count() }}</span></td>
+                                    <td class="total_offer"><span class="badge badge-purple text-white font-18">{{ $merchant->merchantOffers->count() }}</span></td>
                                     <td class="address">{{$merchant->address}}</td>
                                     <td class="contact_person_name">{{$merchant->MerchantInfo->contact_person_name}}</td>
                                     <td class="contact_person_phone">{{$merchant->MerchantInfo->contact_person_phone}}</td>
