@@ -82,6 +82,9 @@ Route::post('package/update',[PackagesController::class,'update'])->middleware('
 Route::get('merchant/index',[MerchantController::class,'index'])->middleware('auth')->name('merchant.index');
 Route::post('merchant/store',[MerchantController::class,'store'])->middleware('auth')->name('merchant.store');
 Route::post('merchant/update',[MerchantController::class,'update'])->middleware('auth')->name('merchant.update');
+Route::get('merchant/transactionDetails/{merchant_id}',[MerchantController::class,'transactionDetails'])->middleware('auth')->name('merchant.transactionDetails');
+Route::post('merchant/transaction/delete',[MerchantController::class,'transactionDelete'])->middleware('auth')->name('merchant.transaction.delete');
+Route::post('merchant/transaction/update',[MerchantController::class,'transactionUpdate'])->middleware('auth')->name('merchant.transaction.update');
 
 # category
 Route::get('category/index',[CategoriesController::class,'index'])->middleware('auth')->name('category.index');

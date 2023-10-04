@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Merchant;
 use App\Models\MerchantPackage;
+use App\Models\OfferTransactions;
 use App\Models\Packages;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Hash;
 
 class MerchantController extends Controller
 {
+    # ------------------------------------------ Admin panel use ------------------------------------- #
     /**
      * index
      */
@@ -207,6 +209,113 @@ class MerchantController extends Controller
 //        }
 
     }
+
+    /**
+     *transactionDetails, show merchant wise total offer transactions report
+     */
+    function transactionDetails(Request $request){
+        # get have module access permission
+        $obj=new UserPermissionsController();
+        $returnAccessStatus=$obj->moduleAccessPermission('Merchant Manage');
+        if( Auth::user()->type=='Admin' || $returnAccessStatus=='allow'){
+            $merchant_id = $request->merchant_id;
+            $merchantInfo = User::query()->find($merchant_id);
+
+            $invoice_no = $request->invoice_no;
+            $fromDate=$request->fromDate;
+            $toDate=$request->toDate;
+            # transaction list
+            $transactionDetails = OfferTransactions::query()
+                ->where(function ($q) use ($fromDate,$toDate,$invoice_no){
+                    if($invoice_no)
+                        $q->where('invoice_no',$invoice_no);
+                    if(!empty($fromDate) && !empty($toDate))
+                        $q->whereBetween('created_at',[$fromDate,$toDate]);
+                })
+                ->where('merchant_id',$merchant_id)
+                ->orderBy('id','desc')
+                ->simplePaginate(20);
+
+            # today total transaction amount
+            $today_transaction_amount = OfferTransactions::query()
+                ->where('merchant_id',$merchant_id)
+                ->where('status','confirm')
+                ->where('created_at',Carbon::today())
+                ->sum('amount');
+
+            # total transaction amount
+            $total_transaction_amount = OfferTransactions::query()
+                ->where('merchant_id',$merchant_id)
+                ->where('status','confirm')
+                ->sum('amount');
+            return view('merchant.transaction_details',compact('transactionDetails','merchant_id','merchantInfo','today_transaction_amount','total_transaction_amount'));
+        }
+        else
+        {
+            return redirect()->route('home');
+        }
+    }
+
+    /**
+     * transactionDelete
+     */
+    function transactionDelete(Request $request){
+        # get have module access permission
+        $obj=new UserPermissionsController();
+        $returnAccessStatus=$obj->moduleAccessPermission('Merchant Manage');
+        if( Auth::user()->type=='Admin' || $returnAccessStatus=='allow'){
+            $transaction_id = $request->id;
+            OfferTransactions::query()->find($transaction_id)->delete();
+            Toastr::success('Transaction Deleted Successfully!','Success');
+            return redirect()->back();
+        }
+        else
+        {
+            return redirect()->route('home');
+        }
+    }
+    /**
+     * transactionUpdate
+     */
+    function transactionUpdate(Request $request){
+        $request->validate([
+            'id'            => 'required',
+            'amount'        => 'required',
+            'discount'      => 'required',
+            'point'         => 'required',
+            'point_status'  => 'required',
+        ],
+            [
+                'id.required'           => 'Id required',
+                'amount.required'       =>  'Amount required',
+                'discount.required'     =>  'discount required',
+                'point.required'        =>  'point required',
+                'point_status.required' =>  'point_status required',
+            ]
+        );
+        # get have module access permission
+        $obj=new UserPermissionsController();
+        $returnAccessStatus=$obj->moduleAccessPermission('Merchant Manage');
+        if( Auth::user()->type=='Admin' || $returnAccessStatus=='allow'){
+            //dd($request->all());
+            $transaction_id = $request->id;
+            $data = [
+                'amount'        => $request->amount,
+                'discount'      => $request->discount,
+                'point'         => $request->point,
+                'point_status'  => $request->point_status,
+                'updated_at'    => Carbon::now(),
+            ];
+            OfferTransactions::query()->where('id',$request->id)->update($data);
+            Toastr::success('Transaction Updated Successfully!','Success');
+            return redirect()->back();
+        }
+        else
+        {
+            return redirect()->route('home');
+        }
+    }
+
 
 
     # ------------------------------------------ Merchant panel use ------------------------------------- #

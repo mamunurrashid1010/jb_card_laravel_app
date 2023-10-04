@@ -71,6 +71,7 @@
                             <thead class="thead-light">
                             <tr>
                                 <th>#</th>
+                                <th class="text-center"><strong>Action</strong></th>
                                 <th><strong>Photo</strong></th>
                                 <th><strong>Business Name</strong></th>
                                 <th><strong>Owner Name</strong></th>
@@ -83,7 +84,6 @@
                                 <th><strong>C.P. Phone</strong></th>
                                 <th><strong>Status</strong></th>
                                 <th><strong>Package</strong></th>
-                                <th class="text-center"><strong>Action</strong></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -91,6 +91,10 @@
                                 <tr>
                                     <td>{{$key+1}}</td>
                                     <td hidden class="ids">{{ $merchant->id }}</td>
+                                    <td class="text-center">
+                                        <a class="" href="{{route('merchant.transactionDetails',$merchant->id)}}"  style="color: #bdad11;cursor: pointer"><button class="btn btn-info btn-sm">Transaction Details</button></a>
+                                        <a class="Update" data-toggle="modal" data-id="'.$merchant->id.'" data-target="#edit" style="color: #bdad11;cursor: pointer"><button class="btn btn-warning btn-sm">Edit</button></a>
+                                    </td>
                                     <td class="photo">
                                         @if($merchant->image)
                                             <img src="{{ asset('images/users/'.$merchant->image) }}" class="card-img-to avatar" alt="profile_image">
@@ -112,9 +116,6 @@
                                         @foreach($merchant->merchantPackage as $mp)
                                             <span class="badge badge-info">{{$mp->packageName->name ?? ''}}</span>
                                         @endforeach
-                                    </td>
-                                    <td class="text-center">
-                                        <a class="Update" data-toggle="modal" data-id="'.$merchant->id.'" data-target="#edit" style="color: #bdad11;cursor: pointer"><button class="btn btn-warning btn-sm">Edit</button></a>
                                     </td>
                                 </tr>
                             @endforeach
