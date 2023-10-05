@@ -105,6 +105,21 @@
                     @endif
                 @endif
 
+<!----------------------------------------- invoice ------------------------------------------ -->
+                @if (Auth::user()->type=='Admin')
+                    <li> <a href="{{route('invoice.index')}}"><i class="la la-clipboard-list">
+                            </i> <span>Invoice Manage</span></a>
+                    </li>
+                @else
+                    <!-- invoice -->
+                    @php $invoice= in_array('Invoice Manage',$arr);@endphp
+                    @if($invoice>0)
+                        <li> <a href="{{route('invoice.index')}}"><i class="la la-clipboard-list">
+                                </i> <span>Invoice Manage</span></a>
+                        </li>
+                    @endif
+                @endif
+
 <!-----------------------------------------Authentication/User Controller------------------------------------------ -->
                 @if (Auth::user()->type=='Admin')
                     {{-- <li class="menu-title"> <span>Authentication</span> </li>--}}

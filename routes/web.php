@@ -7,6 +7,7 @@ use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerWalletController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InvoicesController;
 use App\Http\Controllers\MerchantController;
 use App\Http\Controllers\OffersController;
 use App\Http\Controllers\OfferTransactionsController;
@@ -90,6 +91,12 @@ Route::post('merchant/transaction/update',[MerchantController::class,'transactio
 Route::get('category/index',[CategoriesController::class,'index'])->middleware('auth')->name('category.index');
 Route::post('category/store',[CategoriesController::class,'store'])->middleware('auth')->name('category.store');
 Route::post('category/update',[CategoriesController::class,'update'])->middleware('auth')->name('category.update');
+
+# invoice management
+Route::get('invoice/index',[InvoicesController::class,'index'])->middleware('auth')->name('invoice.index');
+Route::post('invoice/store',[InvoicesController::class,'store'])->middleware('auth')->name('invoice.store');
+Route::post('invoice/update',[InvoicesController::class,'update'])->middleware('auth')->name('invoice.update');
+Route::get('getUserList_searchByName', [InvoicesController::class, 'getUserList_searchByName'])->middleware('auth')->name('getUserList_searchByName');
 
 
 # product
