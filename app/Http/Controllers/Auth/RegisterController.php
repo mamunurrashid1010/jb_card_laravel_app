@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Companies;
 use App\Models\CustomerPackages;
+use App\Models\Invoices;
 use App\Models\Packages;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -55,10 +56,25 @@ class RegisterController extends Controller
                 //'company_id' => $companyId,
                 'created_at' => Carbon::now(),
             ]);
+
             # customer package
             CustomerPackages::query()->create([
                 'customer_id' => $regStatus->id,
                 'package_id'  => $request->package,
+            ]);
+
+            # unpaid invoice generate
+            $invoice_no = $this->uniqueRandomNumberGenerate();
+            $package = Packages::query()->find($request->package);
+            Invoices::query()->insert([
+                'user_id'       => $regStatus->id,
+                'user_type'     => 'Customer',
+                'invoice_no'    => $invoice_no,
+                'invoice_date'  => Carbon::now()->format('Y-m-d'),
+                'amount'        => $package->amount,
+                'status'        => 'unpaid',
+                'description'   => 'Package activation charge',
+                'created_at'    => Carbon::now(),
             ]);
 
             DB::commit();
@@ -67,7 +83,7 @@ class RegisterController extends Controller
         }
         catch(\Exception $e){
             DB::rollback();
-            //dd($e);
+            dd($e);
             Toastr::error('Fail :)','Error');
             return redirect()->back();
         }
@@ -82,5 +98,13 @@ class RegisterController extends Controller
 //                return redirect('login');
 //            }
 
+    }
+    function uniqueRandomNumberGenerate(){
+        $randomNumber = rand(1,10000000);
+        $exist = Invoices::query()->where('invoice_no',$randomNumber)->count();
+        if($exist){
+            $this->uniqueRandomNumberGenerate();
+        }
+        return $randomNumber;
     }
 }

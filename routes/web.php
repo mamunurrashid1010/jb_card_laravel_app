@@ -97,6 +97,7 @@ Route::get('invoice/index',[InvoicesController::class,'index'])->middleware('aut
 Route::post('invoice/store',[InvoicesController::class,'store'])->middleware('auth')->name('invoice.store');
 Route::post('invoice/update',[InvoicesController::class,'update'])->middleware('auth')->name('invoice.update');
 Route::get('getUserList_searchByName', [InvoicesController::class, 'getUserList_searchByName'])->middleware('auth')->name('getUserList_searchByName');
+Route::get('invoice/print/{invoice_id}',[InvoicesController::class,'printInvoice'])->middleware('auth')->name('invoice.print');
 
 
 # product

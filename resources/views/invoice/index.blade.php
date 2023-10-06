@@ -100,7 +100,7 @@
                                 <th><strong>Name</strong></th>
                                 <th><strong>User Type</strong></th>
                                 <th><strong>Invoice No</strong></th>
-                                <th><strong>Amount</strong></th>
+                                <th><strong>Amount($)</strong></th>
                                 <th><strong>Invoice Date</strong></th>
                                 <th><strong>Description</strong></th>
                                 <th><strong>Status</strong></th>
@@ -116,11 +116,11 @@
                                         <strong>{{$invoice->userInfo->name}}</strong> ({{$invoice->userInfo->phone}})<br>
                                         {{$invoice->userInfo->email}}
                                     </td>
-                                    <td class="user_type"><strong>{{$invoice->user_type}}</strong></td>
+                                    <td class="user_type">{{$invoice->user_type}}</td>
                                     <td class="invoice_no"><strong>{{$invoice->invoice_no}}</strong></td>
                                     <td class="amount"><strong>{{$invoice->amount}}</strong></td>
-                                    <td class="invoice_date"><strong>{{$invoice->invoice_date}}</strong></td>
-                                    <td class="description"><strong>{{$invoice->description}}</strong></td>
+                                    <td class="invoice_date">{{$invoice->invoice_date}}</td>
+                                    <td class="description">{{$invoice->description}}</td>
                                     <td class="statuss">
                                         @if($invoice->status == 'paid')
                                             <span class="badge badge-success">{{$invoice->status}}</span>
@@ -129,6 +129,7 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
+                                        <a href="{{route('invoice.print',$invoice->id)}}" style="cursor: pointer"><button class="btn btn-info btn-sm">Print Invoice</button></a>
                                         <a class="Update" data-toggle="modal" data-id="'.$invoice->id.'" data-target="#edit" style="color: #bdad11;cursor: pointer"><button class="btn btn-warning btn-sm">Edit</button></a>
                                     </td>
                                 </tr>

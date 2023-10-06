@@ -33,6 +33,7 @@ class InvoicesController extends Controller
                     if(!empty($fromDate) && !empty($toDate))
                         $q->whereBetween('invoice_date',[$fromDate,$toDate]);
                 })
+                ->orderBy('id','desc')
                 ->simplePaginate(20);
             return view('invoice.index',compact('invoices'));
         }
@@ -134,6 +135,25 @@ class InvoicesController extends Controller
 
         Toastr::success('Data Updated Successfully','Success');
         return redirect()->back();
+    }
+
+    /**
+     * printInvoice
+     */
+    function printInvoice(Request $request){
+        # get have module access permission
+        $obj=new UserPermissionsController();
+        $returnAccessStatus=$obj->moduleAccessPermission('Invoice Manage');
+        if( Auth::user()->type=='Admin' || $returnAccessStatus=='allow'){
+            $invoice_id = $request->invoice_id;
+
+            $invoice = Invoices::query()->findOrFail($invoice_id);
+            return view('invoice.printInvoice',compact('invoice'));
+        }
+        else
+        {
+            return redirect()->route('home');
+        }
     }
 
     function uniqueRandomNumberGenerate(){
