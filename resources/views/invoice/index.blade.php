@@ -49,6 +49,45 @@
             @endif
             <!-- /error message -->
 
+            <!-- Search Filter -->
+            <form action="{{ route('invoice.index') }}" method="GET">
+                @csrf
+                <div class="row filter-row">
+                    <div class="col-sm-6 col-md-2">
+                        <div class="form-group form-focus">
+                            <label>Invoice No</label>
+                            <input id="" name="invoice_no" class="form-control" type="text" value="{{Request()->get('invoice_no')}}">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-2">
+                        <div class="form-group form-focus">
+                            <label>User Type</label>
+                            <select class="select form-control" name="user_type">
+                                <option value=""> --Select merchant/customer --</option>
+                                <option value="Merchant" @if(Request()->get('user_type') == 'Merchant') selected @endif>Merchant</option>
+                                <option value="Customer" @if(Request()->get('user_type') == 'Customer') selected @endif>Customer</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-2">
+                        <div class="form-group form-focus">
+                            <label>From Date</label>
+                            <input id="datepicker" name="fromDate" class="form-control" type="date" value="{{Request()->get('fromDate')}}">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-2">
+                        <div class="form-group form-focus">
+                            <label>To Date</label>
+                            <input id="datepicker" name="toDate" class="form-control" type="date" value="{{Request()->get('toDate')}}">
+                        </div>
+                    </div>
+                    <div class="col-sm-2 col-md-2 col-lg-2">
+                        <button type="submit" class="btn btn-success btn-block" style="margin-top: 28px"> Search </button>
+                    </div>
+                </div>
+            </form>
+            <!-- /Search Filter -->
+
             <!-- table data -->
             <div class="row pt-3">
                 <div class="col-md-12">
@@ -73,13 +112,22 @@
                                 <tr>
                                     <td>{{$key+1}}</td>
                                     <td hidden class="ids">{{ $invoice->id }}</td>
-                                    <td class="name"><strong>{{$invoice->name}}</strong></td>
+                                    <td class="userInfo">
+                                        <strong>{{$invoice->userInfo->name}}</strong> ({{$invoice->userInfo->phone}})<br>
+                                        {{$invoice->userInfo->email}}
+                                    </td>
                                     <td class="user_type"><strong>{{$invoice->user_type}}</strong></td>
                                     <td class="invoice_no"><strong>{{$invoice->invoice_no}}</strong></td>
                                     <td class="amount"><strong>{{$invoice->amount}}</strong></td>
                                     <td class="invoice_date"><strong>{{$invoice->invoice_date}}</strong></td>
                                     <td class="description"><strong>{{$invoice->description}}</strong></td>
-                                    <td class="status"><strong>{{$invoice->status}}</strong></td>
+                                    <td class="statuss">
+                                        @if($invoice->status == 'paid')
+                                            <span class="badge badge-success">{{$invoice->status}}</span>
+                                        @else
+                                            <span class="badge badge-warning">{{$invoice->status}}</span>
+                                        @endif
+                                    </td>
                                     <td class="text-center">
                                         <a class="Update" data-toggle="modal" data-id="'.$invoice->id.'" data-target="#edit" style="color: #bdad11;cursor: pointer"><button class="btn btn-warning btn-sm">Edit</button></a>
                                     </td>
@@ -134,6 +182,18 @@
                                         <input id="" name="amount" class="form-control" type="number" style="" value="" required>
                                     </div>
                                 </div>
+                                <div class="col-sm-12">
+                                    <label>Description</label>
+                                    <textarea name="description" rows="2" class="form-control"></textarea>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label>Payment Status  <span class="text-danger">*</span></label>
+                                    <select class="select" name="status" id="status" required>
+                                        <option selected disabled> --Select --</option>
+                                        <option value="paid">paid</option>
+                                        <option value="unpaid">unpaid</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="submit-section">
                                 <button type="submit" class="btn btn-primary submit-btn">Add Now</button>
@@ -157,20 +217,43 @@
                     </div>
                     <br>
                     <div class="modal-body">
-                        <form action="{{route('package.update')}}" method="POST" enctype="multipart/form-data">
+                        <form action="{{route('invoice.update')}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" id="e_id" name="id" class="e_id" value="">
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>Name <span class="text-danger">*</span></label>
-                                        <input id="e_name" name="name" class="form-control" type="text" required>
+                                        <label>Invoice No <span class="text-danger">*</span></label>
+                                        <input id="e_invoice_no" name="invoice_no" class="form-control" type="text" value="" required readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Invoice Date <span class="text-danger">*</span></label>
+                                        <input id="e_invoice_date" name="invoice_date" class="form-control" type="date" value="" required>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Amount($) <span class="text-danger">*</span></label>
-                                        <input id="e_amount" name="amount" class="form-control" type="text" value="" required>
+                                        <input id="e_amount" name="amount" class="form-control" type="number" style="" value="" required>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label>Payment Status  <span class="text-danger">*</span></label>
+                                    <select class="select" name="status" id="e_status" required>
+                                        <option value="paid">paid</option>
+                                        <option value="unpaid">unpaid</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-12">
+                                    <label>Description</label>
+                                    <textarea id="e_description" name="description" rows="2" class="form-control"></textarea>
+                                </div><br>
+                                <div class="col-sm-12">
+                                    <div class="form-group form-select" style="width: 100%">
+                                        <label>Change user </label>
+                                        <select class="form-control" id="user_search_edit" name="user_search" style=""></select>
                                     </div>
                                 </div>
                             </div>
@@ -230,8 +313,28 @@
     {{-- getUserList_searchByName /customer/merchant --}}
     <script>
         var path = "{{route('getUserList_searchByName')}}";
-        <!-- use from search/filter section  -->
+        <!-- add model :use from search/filter section  -->
         $('#user_search').select2({
+            placeholder: '--- Select Customer/Merchant ---',
+            ajax: {
+                url: path,
+                dataType: 'json',
+                delay: 250,
+                processResults: function (data) {
+                    return {
+                        results:  $.map(data, function (item) {
+                            return {
+                                text: item.name + '(ID: ' + item.id + ')'+ '(email: ' + item.email + ')',
+                                id: item.id
+                            }
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+        <!-- edit model :use from search/filter section  -->
+        $('#user_search_edit').select2({
             placeholder: '--- Select Customer/Merchant ---',
             ajax: {
                 url: path,
@@ -258,8 +361,16 @@
         {
             var _this = $(this).parents('tr');
             $('#e_id').val(_this.find('.ids').text());
-            $('#e_name').val(_this.find('.name').text());
+            $('#e_userInfo').val(_this.find('.userInfo').text());
+            $('#e_invoice_no').val(_this.find('.invoice_no').text());
+            $('#e_invoice_date').val(_this.find('.invoice_date').text());
             $('#e_amount').val(_this.find('.amount').text());
+            $('#e_description').val(_this.find('.description').text());
+
+            var statuss = (_this.find(".statuss").text());
+            var _option = '<option selected value="' +statuss+ '">' + statuss + '</option>'
+            $( _option).appendTo("#e_status");
+
         });
     </script>
 
